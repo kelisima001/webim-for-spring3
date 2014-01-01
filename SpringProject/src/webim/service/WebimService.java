@@ -24,10 +24,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import webim.WebimClient;
-import webim.WebimConfig;
+import webim.config.WebimConfig;
 import webim.WebimEndpoint;
 import webim.WebimGroup;
 import webim.WebimHistory;
@@ -39,7 +40,7 @@ import webim.dao.WebimHistoryDao;
 import webim.dao.WebimSettingDao;
 
 /**
- * WebimService·â×°Webim ActionsÓëWebim DaoÖ®¼äÒÀÀµµ÷ÓÃ¡£ 
+ * WebimServiceå°è£…Webim Actionsä¸Webim Daoä¹‹é—´ä¾èµ–è°ƒç”¨ã€‚
  * 
  * @author Ery Lee <ery.lee at gamil.com>
  * @since 1.0
@@ -59,11 +60,11 @@ public class WebimService {
 	}
 
 	/**
-	 * µ¥Àı
+	 * å•ä¾‹
 	 * 
-	 * @return WebimServiceµ¥Àı
+	 * @return WebimServiceå•ä¾‹
 	 */
-	public static WebimService instance() {
+	public synchronized static WebimService instance() {
 		if (instance == null) {
 			instance = new WebimService();
 		}
@@ -71,36 +72,36 @@ public class WebimService {
 	}
 
 	/**
-	 * ·µ»Øµ±Ç°WebimÓÃ»§µÄUid£¬Ò»°ãÓ¦´ÓHTTP SessionÖĞ¶ÁÈ¡¡£ 
+	 * è¿”å›å½“å‰Webimç”¨æˆ·çš„Uidï¼Œä¸€èˆ¬åº”ä»HTTP Sessionä¸­è¯»å–ã€‚
 	 * 
-	 * @return µ±Ç°WebimÓÃ»§µÄUID
+	 * @return å½“å‰Webimç”¨æˆ·çš„UID
 	 */
 	public long currentUid() {
-		//TODO: Ó¦¸ÃÌæ»»¸Ã´úÂë£¬¶ÁÈ¡µ±Ç°µÇÂ½ÓÃ»§µÄID¡£
+		// TODO: åº”è¯¥æ›¿æ¢è¯¥ä»£ç ï¼Œè¯»å–å½“å‰ç™»é™†ç”¨æˆ·çš„IDã€‚
 		return 1;
 	}
 
-
 	/**
-	 * ·µ»Øµ±Ç°µÄWebim¶Ëµã(ÓÃ»§)
+	 * è¿”å›å½“å‰çš„Webimç«¯ç‚¹(ç”¨æˆ·)
 	 * 
-	 * @return µ±Ç°Webim¶Ëµã(ÓÃ»§)
+	 * @return å½“å‰Webimç«¯ç‚¹(ç”¨æˆ·)
 	 */
 	public WebimEndpoint currentEndpoint() {
-		//TODO: Ó¦Ìæ»»¸Ã´úÂë£¬·µ»Ø¼¯³ÉÏµÍ³µÄµ±Ç°ÓÃ»§¡£
+		// TODO: åº”æ›¿æ¢è¯¥ä»£ç ï¼Œè¿”å›é›†æˆç³»ç»Ÿçš„å½“å‰ç”¨æˆ·ã€‚
 		WebimEndpoint ep = new WebimEndpoint("1", "user1");
-		ep.setPic_url("/Webim/static/images/chat.png"); // ÓÃ»§Í·Ïñ
+		ep.setPic_url("https://1.gravatar.com/avatar/136e370cbf1cf500cbbf791e56dac614?d=https%3A%2F%2Fidenticons.github.com%2F577292a0aa8cb84aa3e6f06fee6f711c.png&s=70"); // ï¿½Ã»ï¿½Í·ï¿½ï¿½
 		ep.setShow("available");
-		ep.setUrl(""); // ÓÃ»§¿Õ¼ä
-		ep.setStatus(""); // ÓÃ»§×´Ì¬
+		ep.setUrl(""); // ç”¨æˆ·ç©ºé—´
+		ep.setStatus(""); // ç”¨æˆ·çŠ¶æ€
 		return ep;
 	}
 
 	/**
-	 * ·µ»Øµ±Ç°µÄWebim¿Í»§¶Ë¡£
+	 * è¿”å›å½“å‰çš„Webimå®¢æˆ·ç«¯ã€‚
 	 * 
-	 * @param ticket Í¨ĞÅÁîÅÆ
-	 * @return µ±Ç°ÓÃ»§µÄWebim¿Í»§¶Ë
+	 * @param ticket
+	 *            é€šä¿¡ä»¤ç‰Œ
+	 * @return å½“å‰ç”¨æˆ·çš„Webimå®¢æˆ·ç«¯
 	 */
 	public WebimClient currentClient(String ticket) {
 		WebimClient c = new WebimClient(currentEndpoint(), WebimConfig.DOMAIN,
@@ -110,53 +111,59 @@ public class WebimService {
 	}
 
 	/**
-	 * ¸ù¾İµ±Ç°ÓÃ»§id£¬·µ»Ø¸ÃÓÃ»§ºÃÓÑ£¬´ÓWebimDaoÖĞ¶ÁÈ¡¡£
+	 * æ ¹æ®å½“å‰ç”¨æˆ·idï¼Œè¿”å›è¯¥ç”¨æˆ·å¥½å‹ï¼Œä»WebimDaoä¸­è¯»å–ã€‚
 	 * 
-	 * @param uid µ±Ç°ÓÃ»§id
-	 * @return ¸ÃÓÃ»§ºÃÓÑ¡£
+	 * @param uid
+	 *            å½“å‰ç”¨æˆ·id
+	 * @return è¯¥ç”¨æˆ·å¥½å‹ã€‚
 	 */
 	public List<WebimEndpoint> getBuddies(long uid) {
 		return webimDao.getBuddiesByUid(uid, 1000);
 	}
-	
+
 	/**
-	 * ¸ù¾İºÃÓÑidÁĞ±í¶ÁÈ¡ºÃÓÑÁĞ±í¡£
+	 * æ ¹æ®å¥½å‹idåˆ—è¡¨è¯»å–å¥½å‹åˆ—è¡¨ã€‚
 	 * 
-	 * @param ids ºÃÓÑidÁĞ±í
-	 * @return ºÃÓÑÁĞ±í
+	 * @param ids
+	 *            å¥½å‹idåˆ—è¡¨
+	 * @return å¥½å‹åˆ—è¡¨
 	 */
 	public List<WebimEndpoint> getBuddiesByIds(long[] ids) {
 		return webimDao.getBuddiesByIds(ids);
 	}
 
 	/**
-	 * ¸ù¾İµ±Ç°ÓÃ»§id£¬·µ»ØÓÃ»§ËùÊôÈº×é£¬´ÓWebimDaoÖĞ¶ÁÈ¡
+	 * æ ¹æ®å½“å‰ç”¨æˆ·idï¼Œè¿”å›ç”¨æˆ·æ‰€å±ç¾¤ç»„ï¼Œä»WebimDaoä¸­è¯»å–
 	 * 
-	 * @param uid µ±Ç°ÓÃ»§id
-	 * @return ÓÃ»§ËùÊôÈº×é
+	 * @param uid
+	 *            å½“å‰ç”¨æˆ·id
+	 * @return ç”¨æˆ·æ‰€å±ç¾¤ç»„
 	 */
 	public List<WebimGroup> getGroups(long uid) {
 		return webimDao.getGroups(uid, 100);
 	}
 
 	/**
-	 * ¸ù¾İµ±Ç°ÓÃ»§uid£¬»ñÈ¡ÁÙÊ±ÌÖÂÛ×é¡£
+	 * æ ¹æ®å½“å‰ç”¨æˆ·uidï¼Œè·å–ä¸´æ—¶è®¨è®ºç»„ã€‚
 	 * 
-	 * @param uid ÓÃ»§uid
-	 * @return ÁÙÊ±ÌÖÂÛ×é
+	 * @param uid
+	 *            ç”¨æˆ·uid
+	 * @return ä¸´æ—¶è®¨è®ºç»„
+	 * @throws JSONException
 	 */
-	public List<WebimGroup> getTmpGroups(long uid) {
+	public List<WebimGroup> getTmpGroups(long uid) throws JSONException {
 		List<WebimGroup> groups = new ArrayList<WebimGroup>();
-		String json  = settingDao.get(uid);
+		String json = settingDao.get(uid);
 		JSONObject obj = new JSONObject(json);
-		if(obj.has("temporary_rooms")) {
+		if (obj.has("temporary_rooms")) {
 			JSONArray array = obj.getJSONArray("temporary_rooms");
-			for(int i = 0; i < array.length(); i++) {
+			for (int i = 0; i < array.length(); i++) {
 				JSONObject o = array.getJSONObject(i);
-				WebimGroup g = new WebimGroup(o.getString("id"), o.getString("nick"));
+				WebimGroup g = new WebimGroup(o.getString("id"),
+						o.getString("nick"));
 				g.setTemporary(true);
-				//FIXME Later
-				g.setPic_url("/Webim/static/images/chat.png");
+				// FIXME Later
+				g.setPic_url("/SpringProject/static/images/chat.png");
 				groups.add(g);
 			}
 		}
@@ -164,40 +171,46 @@ public class WebimService {
 	}
 
 	/**
-	 * ¸ù¾İÈº×éid£¬·µ»ØÒ»¸öÈº×éµÄÏêÏ¸ĞÅÏ¢¡£
+	 * æ ¹æ®ç¾¤ç»„idï¼Œè¿”å›ä¸€ä¸ªç¾¤ç»„çš„è¯¦ç»†ä¿¡æ¯ã€‚
 	 * 
-	 * @param id Èº×éid
-	 * @return Èº×éÏêÏ¸
+	 * @param id
+	 *            ç¾¤ç»„id
+	 * @return ç¾¤ç»„è¯¦ç»†
 	 */
 	public WebimGroup getGroup(String id) {
 		return webimDao.getGroup(id);
 	}
 
 	/**
-	 * ¸ù¾İÓÃ»§uid£¬¶ÁÈ¡¸ÃÓÃ»§ÀëÏßÏûÏ¢
+	 * æ ¹æ®ç”¨æˆ·uidï¼Œè¯»å–è¯¥ç”¨æˆ·ç¦»çº¿æ¶ˆæ¯
 	 * 
-	 * @param uid ÓÃ»§uid
-	 * @return ÀëÏßÏûÏ¢
+	 * @param uid
+	 *            ç”¨æˆ·uid
+	 * @return ç¦»çº¿æ¶ˆæ¯
 	 */
 	public List<WebimHistory> getOfflineMessages(long uid) {
 		return historyDao.getOfflineMessages(uid);
 	}
 
 	/**
-	 * Çå³ıÓÃ»§µÄÀëÏßÏûÏ¢ 
+	 * æ¸…é™¤ç”¨æˆ·çš„ç¦»çº¿æ¶ˆæ¯
 	 * 
-	 * @param uid ÓÃ»§uid
+	 * @param uid
+	 *            ç”¨æˆ·uid
 	 */
 	public void offlineMessageToHistory(long uid) {
 		historyDao.offlineMessageToHistory(uid);
 	}
 
 	/**
-	 * Ğ´ÈëÁÄÌì¼ÍÂ¼
+	 * å†™å…¥èŠå¤©çºªå½•
 	 * 
-	 * @param uid ÓÃ»§uid
-	 * @param offline ÊÇ·ñÀëÏß
-	 * @param msg ¼´Ê±ÏûÏ¢
+	 * @param uid
+	 *            ç”¨æˆ·uid
+	 * @param offline
+	 *            æ˜¯å¦ç¦»çº¿
+	 * @param msg
+	 *            å³æ—¶æ¶ˆæ¯
 	 */
 	public void insertHistory(long uid, String offline, WebimMessage msg) {
 		WebimHistory h = new WebimHistory();
@@ -212,67 +225,94 @@ public class WebimService {
 		historyDao.insert(h);
 	}
 
-
 	/**
-	 * ¶ÁÈ¡ÓÃ»§ÅäÖÃ
+	 * è¯»å–ç”¨æˆ·é…ç½®
 	 * 
-	 * @param uid ÓÃ»§uid
-	 * @return ÓÃ»§ÅäÖÃ
+	 * @param uid
+	 *            ç”¨æˆ·uid
+	 * @return ç”¨æˆ·é…ç½®
 	 */
 	public String getSetting(long uid) {
 		return settingDao.get(uid);
 	}
 
 	/**
-	 * ÉèÖÃÓÃ»§ÅäÖÃ
+	 * è®¾ç½®ç”¨æˆ·é…ç½®
 	 * 
-	 * @param uid ÓÃ»§uid
-	 * @param data ÅäÖÃÊı¾İ,json¸ñÊ½
+	 * @param uid
+	 *            ç”¨æˆ·uid
+	 * @param data
+	 *            é…ç½®æ•°æ®,jsonæ ¼å¼
 	 */
 	public void updateSetting(long uid, String data) {
 		settingDao.set(uid, data);
 	}
 
 	/**
-	 * ¶ÁÈ¡µ±Ç°ÓÃ»§ÓëºÃÓÑÁÄÌì¼ÍÂ¼
+	 * è¯»å–å½“å‰ç”¨æˆ·ä¸å¥½å‹èŠå¤©çºªå½•
 	 * 
-	 * @param uid ÓÃ»§uid
-	 * @param with ºÃÓÑid(¸ù¾İĞèÒª¿É×ª»»Îªlong) 
-	 * @param type ÁÄÌì¼ÇÂ¼ÀàĞÍ(chat|grpchat)
-	 * @return ÁÄÌì¼ÇÂ¼
+	 * @param uid
+	 *            ç”¨æˆ·uid
+	 * @param with
+	 *            å¥½å‹id(æ ¹æ®éœ€è¦å¯è½¬æ¢ä¸ºlong)
+	 * @param type
+	 *            èŠå¤©è®°å½•ç±»å‹(chat|grpchat)
+	 * @return èŠå¤©è®°å½•
 	 */
 	public List<WebimHistory> getHistories(long uid, String with, String type) {
 		return historyDao.getHistories(uid, with, type);
 	}
 
 	/**
-	 * Çå³ıÓëºÃÓÑÁÄÌì¼ÇÂ¼
+	 * æ¸…é™¤ä¸å¥½å‹èŠå¤©è®°å½•
 	 * 
-	 * @param uid ÓÃ»§uid
-	 * @param with ºÃÓÑid
+	 * @param uid
+	 *            ç”¨æˆ·uid
+	 * @param with
+	 *            å¥½å‹id
 	 */
 	public void clearHistories(long uid, String with) {
 		historyDao.clearHistories(uid, with);
 	}
 
 	/**
-	 * ¶ÁÈ¡µ±Ç°ÓÃ»§Í¨Öª
+	 * è¯»å–å½“å‰ç”¨æˆ·é€šçŸ¥
 	 * 
-	 * @param uid ÓÃ»§uid
-	 * @return Í¨ÖªÁĞ±í
+	 * @param uid
+	 *            ç”¨æˆ·uid
+	 * @return é€šçŸ¥åˆ—è¡¨
 	 */
 	public List<WebimNotification> getNotifications(long uid) {
 		return webimDao.getNotifications(uid);
 	}
 
 	/**
-	 * ¶ÁÈ¡µ±Ç°ÓÃ»§²Ëµ¥
+	 * è¯»å–å½“å‰ç”¨æˆ·èœå•
 	 * 
-	 * @param uid ÓÃ»§uid
-	 * @return ÓÃ»§²Ëµ¥
+	 * @param uid
+	 *            ç”¨æˆ·uid
+	 * @return ç”¨æˆ·èœå•
 	 */
 	public List<WebimMenu> getMenuList(long uid) {
 		return webimDao.getMenuList(uid);
 	}
 
+	/**
+	 * åˆ›å»ºä¸´æ—¶ç¾¤ç»„
+	 * 
+	 * @param id
+	 *            ç¾¤ç»„id
+	 * @param nick
+	 *            ç¾¤ç»„æ˜µç§°
+	 * @return WebimGroup ç¾¤ç»„å¯¹è±¡
+	 */
+	public WebimGroup newTmpGroup(String id, String nick) {
+		WebimGroup group = new WebimGroup(id, nick);
+		group.setTemporary(true);
+		//TODO: FIXME Later
+		group.setPic_url("/SpringProject/static/images/chat.png");
+		return group;
+	}
+
 }
+

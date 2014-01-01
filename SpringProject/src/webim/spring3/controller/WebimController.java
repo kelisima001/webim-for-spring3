@@ -3,6 +3,7 @@ package webim.spring3.controller;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -18,7 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import webim.WebimClient;
-import webim.WebimConfig;
+import webim.config.WebimConfig;
 import webim.WebimEndpoint;
 import webim.WebimGroup;
 import webim.WebimHistory;
@@ -38,14 +39,15 @@ public class WebimController {
 	@RequestMapping("/boot")
 	public ModelAndView boot() {
 		String message = "Webim Booting... ";
-		System.out.println(message);
+		//System.out.println(message);
 		return new ModelAndView("Webim/boot", "message", message);
 	}
 
-	@RequestMapping("/online")
+	@RequestMapping(value = "/online", method = RequestMethod.POST)
 	@ResponseBody
 	public Map<String, Object> online(HttpServletRequest request,
-			HttpServletResponse response) {
+			HttpServletResponse response) throws Exception {
+		System.out.println("online.....");
 		Map<String, Object> data = new HashMap<String, Object>();
 		long uid = WebimService.instance().currentUid();
 		List<WebimEndpoint> buddies = WebimService.instance().getBuddies(uid);
@@ -71,11 +73,12 @@ public class WebimController {
 				buddyMap.put(e.getId(), e);
 			}
 
-			JSONArray a = json.getJSONArray("buddies");
-			for (int i = 0; i < a.length(); i++) {
-				JSONObject o = a.getJSONObject(i);
-				String n = o.getString("name");
-				buddyMap.get(n).setShow("available");
+			JSONObject bObj = json.getJSONObject("buddies");
+			Iterator<String> it = bObj.keys();
+			while (it.hasNext()) {
+				String key = it.next();
+				String show = bObj.getString(key);
+				buddyMap.get(key).setShow(show);
 			}
 
 			Collection<WebimEndpoint> rtBuddies;
@@ -95,12 +98,12 @@ public class WebimController {
 				groupMap.put(g.getId(), g);
 			}
 			List<WebimGroup> groups1 = new ArrayList<WebimGroup>();
-			a = json.getJSONArray("groups");
-			for (int i = 0; i < a.length(); i++) {
-				JSONObject o = (JSONObject) a.getJSONObject(i);
-				String gid = o.getString("name");
+			JSONObject gObj = json.getJSONObject("groups");
+			it = gObj.keys();
+			while (it.hasNext()) {
+				String gid = it.next();
 				WebimGroup group = groupMap.get(gid);
-				group.setCount(o.getInt("total"));
+				group.setCount(gObj.getInt(gid));
 				groups1.add(group);
 			}
 
@@ -127,11 +130,11 @@ public class WebimController {
 			data.put("success", false);
 			data.put("error_msg", "IM Server is not found");
 		}
-		
+
 		return data;
 	}
 
-	@RequestMapping("/offline")
+	@RequestMapping(value = "/offline", method = RequestMethod.POST)
 	@ResponseBody
 	public String offline(HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
@@ -145,25 +148,27 @@ public class WebimController {
 	@ResponseBody
 	public String refresh(HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
-    	String ticket = request.getParameter("ticket");
-        WebimClient c = WebimService.instance().currentClient(ticket);
-        c.offline();
+		String ticket = request.getParameter("ticket");
+		WebimClient c = WebimService.instance().currentClient(ticket);
+		c.offline();
 		return SUCCESS;
 	}
 
-	@RequestMapping("/message")
+	@RequestMapping(value = "/message", method = RequestMethod.POST)
 	@ResponseBody
 	public String message(HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
 		long uid = WebimService.instance().currentUid();
 		String ticket = request.getParameter("ticket");
 		String type = request.getParameter("type");
-		if (type == null) type = "chat";
+		if (type == null)
+			type = "chat";
 		String offline = request.getParameter("offline");
 		String to = request.getParameter("to");
 		String body = request.getParameter("body");
 		String style = request.getParameter("style");
-		if(style == null) style = "";
+		if (style == null)
+			style = "";
 
 		WebimClient c = WebimService.instance().currentClient(ticket);
 		WebimMessage msg = new WebimMessage(to, c.getEndpoint().getNick(),
@@ -176,7 +181,7 @@ public class WebimController {
 		return SUCCESS;
 	}
 
-	@RequestMapping("/presence")
+	@RequestMapping(value = "/presence", method = RequestMethod.POST)
 	@ResponseBody
 	public String presence(HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
@@ -191,7 +196,7 @@ public class WebimController {
 		return SUCCESS;
 	}
 
-	@RequestMapping("/status")
+	@RequestMapping(value = "/status", method = RequestMethod.POST)
 	@ResponseBody
 	public String status(HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
@@ -207,7 +212,7 @@ public class WebimController {
 		return SUCCESS;
 	}
 
-	@RequestMapping("/setting")
+	@RequestMapping(value = "/setting", method = RequestMethod.POST)
 	@ResponseBody
 	public String setting(HttpServletRequest request,
 			HttpServletResponse response) {
@@ -217,7 +222,7 @@ public class WebimController {
 		return SUCCESS;
 	}
 
-	@RequestMapping("/history")
+	@RequestMapping(value = "/history", method = RequestMethod.GET)
 	@ResponseBody
 	public List<WebimHistory> history(HttpServletRequest request,
 			HttpServletResponse response) {
@@ -229,7 +234,7 @@ public class WebimController {
 		return histories;
 	}
 
-	@RequestMapping("/history/clear")
+	@RequestMapping(value = "/history/clear", method = RequestMethod.POST)
 	@ResponseBody
 	public String clearHistory(HttpServletRequest request,
 			HttpServletResponse response) {
@@ -240,7 +245,7 @@ public class WebimController {
 	}
 
 	@RequestMapping("/history/download")
-	@ResponseBody
+	//@ResponseBody
 	public ModelAndView downloadHistory(HttpServletRequest request,
 			HttpServletResponse response) {
 		String id = request.getParameter("id");
@@ -253,45 +258,41 @@ public class WebimController {
 
 	}
 
-	@RequestMapping("/members")
+	@RequestMapping(value = "/members", method = RequestMethod.GET)
 	@ResponseBody
-	public ArrayList<Map<String,String>> members(HttpServletRequest request,
+	public ArrayList<Map<String, String>> members(HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
 		String gid = request.getParameter("id");
 		String ticket = request.getParameter("ticket");
-    	WebimClient c = WebimService.instance().currentClient(ticket);
-        JSONObject obj = c.members(gid);
-        ArrayList<Map<String,String>> members = new ArrayList<Map<String,String>>();
-        JSONArray array = obj.getJSONArray(gid);
-        for(int i = 0; i < array.length(); i++)
-        {
-            Map<String,String> m = new HashMap<String,String>();
-            obj = array.getJSONObject(i);
-            m.put("id", obj.getString("id"));
-            m.put("nick", obj.getString("nick"));
-            members.add(m);
-        }
-    	return members;
+		WebimClient c = WebimService.instance().currentClient(ticket);
+		JSONArray array = c.members(gid);
+		ArrayList<Map<String, String>> members = new ArrayList<Map<String, String>>();
+		for (int i = 0; i < array.length(); i++) {
+			Map<String, String> m = new HashMap<String, String>();
+			JSONObject obj = array.getJSONObject(i);
+			m.put("id", obj.getString("id"));
+			m.put("nick", obj.getString("nick"));
+			members.add(m);
+		}
+		return members;
 	}
 
-	@RequestMapping("/group/join")
+	@RequestMapping(value = "/group/join", method = RequestMethod.POST)
 	@ResponseBody
 	public WebimGroup joinGroup(HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
 		String ticket = request.getParameter("ticket");
 		String id = request.getParameter("id");
 		String nick = request.getParameter("nick");
-		if(nick == null) nick = "";
+		if (nick == null)
+			nick = "";
 		WebimClient c = WebimService.instance().currentClient(ticket);
 		WebimGroup data = WebimService.instance().getGroup(id);
-		if(data == null) {
-			data = new WebimGroup(id, nick);
-			data.setTemporary(true);
-			JSONObject o = c.join(id);
-			data.setCount(o.getInt("count"));
-			//TODO: FIXME Later
-			data.setPic_url("/Webim/static/images/chat.png");
+		if (data == null) {
+			data = WebimService.instance().newTmpGroup(id, nick);
 		}
+		JSONObject o = c.join(id);
+		data.setCount(o.getInt(id));
 		return data;
 	}
 
@@ -299,10 +300,10 @@ public class WebimController {
 	@ResponseBody
 	public String leaveGroup(HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
-    	String id = request.getParameter("id");
-    	String ticket = request.getParameter("ticket");
-    	WebimClient c = WebimService.instance().currentClient(ticket);
-        c.leave(id);
+		String id = request.getParameter("id");
+		String ticket = request.getParameter("ticket");
+		WebimClient c = WebimService.instance().currentClient(ticket);
+		c.leave(id);
 		return SUCCESS;
 	}
 
@@ -333,14 +334,14 @@ public class WebimController {
 			HttpServletRequest request, HttpServletResponse response) {
 		return new ArrayList<WebimNotification>();
 	}
-	
+
 	@RequestMapping(value = "/menus", method = RequestMethod.GET)
 	@ResponseBody
 	public Collection<WebimMenu> menus() {
 		long uid = WebimService.instance().currentUid();
 		return WebimService.instance().getMenuList(uid);
 	}
-	
+
 	private List<String> buddyIds(List<WebimEndpoint> buddies) {
 		List<String> ids = new ArrayList<String>();
 		for (WebimEndpoint b : buddies) {
@@ -356,6 +357,5 @@ public class WebimController {
 		}
 		return ids;
 	}
-
 
 }

@@ -29,7 +29,7 @@ import webim.WebimMenu;
 import webim.WebimNotification;
 
 /**
- * WebimDao´ÓÊı¾İ¿âÖĞ¶ÁÈ¡ºÃÓÑ¹ØÏµ¡¢Èº×é¹ØÏµ¡£
+ * WebimDaoä»æ•°æ®åº“ä¸­è¯»å–å¥½å‹å…³ç³»ã€ç¾¤ç»„å…³ç³»ã€‚
  * 
  * @author Ery Lee<ery.lee at gmail.com>
  * @since 1.0
@@ -40,88 +40,93 @@ public class WebimDao {
 	}
 	
 	/**
-	 * ¶ÁÈ¡ÓÃ»§µÄºÃÓÑÁĞ±í¡£Êı¾İ¿âÖĞ¶ÁÈ¡ĞÅÏ¢×ª»»ÎªWebimEndpoint¶ÔÏó¡£
+	 * è¯»å–ç”¨æˆ·çš„å¥½å‹åˆ—è¡¨ã€‚æ•°æ®åº“ä¸­è¯»å–ä¿¡æ¯è½¬æ¢ä¸ºWebimEndpointå¯¹è±¡ã€‚
 	 * 
-	 * @param uid ÓÃ»§uid
-	 * @param limit ÁĞ±íÊıÁ¿ÉÏÏß
-	 * @return ºÃÓÑÁĞ±í
+	 * @param uid
+	 *            ç”¨æˆ·uid
+	 * @param limit
+	 *            åˆ—è¡¨æ•°é‡ä¸Šçº¿
+	 * @return å¥½å‹åˆ—è¡¨
 	 */
 	public List<WebimEndpoint> getBuddiesByUid(long uid, int limit) {
 		// TODO Auto-generated method stub
-		// TODO: Ê¾Àı´úÂë£¬ĞèÒªÌæ»»
+		// TODO: ç¤ºä¾‹ä»£ç ï¼Œéœ€è¦æ›¿æ¢
 		List<WebimEndpoint> buddies = new ArrayList<WebimEndpoint>();
 		WebimEndpoint e = new WebimEndpoint("1", "user1");
-		e.setPic_url("/Webim/static/images/chat.png");
+		e.setPic_url("https://1.gravatar.com/avatar/136e370cbf1cf500cbbf791e56dac614?d=https%3A%2F%2Fidenticons.github.com%2F577292a0aa8cb84aa3e6f06fee6f711c.png&s=50");
 		buddies.add(e);
-		
+
 		e = new WebimEndpoint("2", "user2");
-		e.setPic_url("/Webim/static/images/chat.png");
+		e.setPic_url("https://1.gravatar.com/avatar/136e370cbf1cf500cbbf791e56dac614?d=https%3A%2F%2Fidenticons.github.com%2F577292a0aa8cb84aa3e6f06fee6f711c.png&s=50");
 		buddies.add(e);
-		
+
 		return buddies;
 	}
 
-
 	/**
-	 * ¸ù¾İºÃÓÑidÊı¾İ£¬¶ÁÈ¡ºÃÓÑÁĞ±í¡£
+	 * æ ¹æ®å¥½å‹idæ•°æ®ï¼Œè¯»å–å¥½å‹åˆ—è¡¨ã€‚
 	 * 
-	 * @param ids ºÃÓÑidÁĞ±í
-	 * @return ºÃÓÑÁĞ±í¡£
+	 * @param ids
+	 *            å¥½å‹idåˆ—è¡¨
+	 * @return å¥½å‹åˆ—è¡¨ã€‚
 	 */
 	public List<WebimEndpoint> getBuddiesByIds(long[] ids) {
-		// TODO: Ê¾Àı´úÂë£¬ĞèÒªÌæ»»
+		// TODO: ç¤ºä¾‹ä»£ç ï¼Œéœ€è¦æ›¿æ¢
 		return new ArrayList<WebimEndpoint>();
 	}
 
 	/**
-	 * ¶ÁÈ¡ÓÃ»§ËùÊôµÄÈº×é¡£
+	 * è¯»å–ç”¨æˆ·æ‰€å±çš„ç¾¤ç»„ã€‚
 	 * 
-	 * @param uid ÓÃ»§uid
-	 * @param limit ÊıÁ¿¡£
-	 * @return Èº×éÁĞ±í¡£
+	 * @param uid
+	 *            ç”¨æˆ·uid
+	 * @param limit
+	 *            æ•°é‡ã€‚
+	 * @return ç¾¤ç»„åˆ—è¡¨ã€‚
 	 */
 	public List<WebimGroup> getGroups(long uid, int limit) {
 		// TODO Auto-generated method stub
-		// TODO: Ê¾Àı´úÂë£¬ĞèÒªÌæ»»
+		// TODO: ç¤ºä¾‹ä»£ç ï¼Œéœ€è¦æ›¿æ¢
 		List<WebimGroup> groups = new ArrayList<WebimGroup>();
 		WebimGroup g = new WebimGroup("group1", "group1");
-		g.setPic_url("/Webim/static/images/group.gif");
+		g.setPic_url("/SpringProject/static/images/group.gif");
 		groups.add(g);
 		return groups;
 	}
 
-	
 	/**
-	 * ¶ÁÈ¡Èº×é¶ÔÏóĞÅÏ¢
+	 * è¯»å–ç¾¤ç»„å¯¹è±¡ä¿¡æ¯
 	 * 
-	 * @param id Èº×éid
-	 * @return Èº×é¶ÔÏó
+	 * @param id
+	 *            ç¾¤ç»„id
+	 * @return ç¾¤ç»„å¯¹è±¡
 	 */
 	public WebimGroup getGroup(String id) {
 		// TODO Auto-generated method stub
-		// TODO: Ê¾Àı´úÂë£¬ĞèÒªÌæ»»
-		return null; //new WebimGroup("1", "group1");
+		return null; // new WebimGroup("1", "group1");
 	}
 
 	/**
-	 * ¶ÁÈ¡ÓÃ»§Í¨Öª
-	 * @param uid ÓÃ»§uid
-	 * @return ÓÃ»§Í¨ÖªÁĞ±í
+	 * è¯»å–ç”¨æˆ·é€šçŸ¥
+	 * 
+	 * @param uid
+	 *            ç”¨æˆ·uid
+	 * @return ç”¨æˆ·é€šçŸ¥åˆ—è¡¨
 	 */
 	public List<WebimNotification> getNotifications(long uid) {
 		return new ArrayList<WebimNotification>();
 	}
 
 	/**
-	 * ¶ÁÈ¡ÓÃ»§²Ëµ¥
+	 * è¯»å–ç”¨æˆ·èœå•
 	 * 
-	 * @param uid ÓÃ»§uid
+	 * @param uid
+	 *            ç”¨æˆ·uid
 	 * 
-	 * @return ÓÃ»§²Ëµ¥ÁĞ±í
+	 * @return ç”¨æˆ·èœå•åˆ—è¡¨
 	 */
 	public List<WebimMenu> getMenuList(long uid) {
 		return new ArrayList<WebimMenu>();
 	}
 
 }
-

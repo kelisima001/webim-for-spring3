@@ -5,22 +5,22 @@
 	webim.extend(webim.setting.defaults.data, _IMC.setting );
 
 	webim.route( {
-		online: path + "Webim/online",
-		offline: path + "Webim/offline",
-		deactivate: path + "Webim/refresh",
-		message: path + "Webim/message",
-		presence: path + "Webim/presence",
-		status: path + "Webim/status",
-		setting: path + "Webim/setting",
-		history: path + "Webim/history",
-		clear: path + "Webim/history/clear",
-		download: path + "Webim/history/download",
-		members: path + "Webim/members",
-		join: path + "Webim/join",
-		leave: path + "Webim/leave",
-		buddies: path + "Webim/buddies",
-		upload: path + "Webim/upload",
-		notifications: path + "Webim/notifications"
+		online: path + "Webim/online.html",
+		offline: path + "Webim/offline.html",
+		deactivate: path + "Webim/refresh.html",
+		message: path + "Webim/message.html",
+		presence: path + "Webim/presence.html",
+		status: path + "Webim/status.html",
+		setting: path + "Webim/setting.html",
+		history: path + "Webim/history.html",
+		clear: path + "Webim/history/clear.html",
+		download: path + "Webim/history/download.html",
+		members: path + "Webim/members.html",
+		join: path + "Webim/join.html",
+		leave: path + "Webim/leave.html",
+		buddies: path + "Webim/buddies.html",
+		upload: path + "Webim/upload.html",
+		notifications: path + "Webim/notifications.html"
 	} );
 
 	webim.ui.emot.init({"dir": path + "static/images/emot/default"});

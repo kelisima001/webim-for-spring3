@@ -26,31 +26,31 @@ import java.util.List;
 import webim.WebimHistory;
 
 /**
- * webim_historiesÊı¾İ¿â±í£¬´æ´¢ÁÄÌì¼ÇÂ¼¡£<br>
- *
+ * webim_historiesæ•°æ®åº“è¡¨ï¼Œå­˜å‚¨èŠå¤©è®°å½•ã€‚<br>
+ * 
  * <pre>
  * CREATE TABLE webim_histories (
- *	    `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
- *	    `send` tinyint(1) DEFAULT NULL,
- *	    `type` varchar(20) DEFAULT NULL,
- *	    `to` varchar(50) NOT NULL,
- *	    `from` varchar(50) NOT NULL,
- *	    `nick` varchar(20) DEFAULT NULL COMMENT 'from nick',
- *	    `body` text,
- *	    `style` varchar(150) DEFAULT NULL,
- *	    `timestamp` double DEFAULT NULL,
- *	    `todel` tinyint(1) NOT NULL DEFAULT '0',
- *	    `fromdel` tinyint(1) NOT NULL DEFAULT '0',
- *	    `created_at` date DEFAULT NULL,
- *	    `updated_at` date DEFAULT NULL,
- *	    PRIMARY KEY (`id`),
- *	    KEY `todel` (`todel`),
- *	    KEY `fromdel` (`fromdel`),
- *	    KEY `timestamp` (`timestamp`),
- *	    KEY `to` (`to`),
- *	    KEY `from` (`from`),
- *	    KEY `send` (`send`)
- *	) ENGINE=MyISAM;
+ *     `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+ *     `send` tinyint(1) DEFAULT NULL,
+ *     `type` varchar(20) DEFAULT NULL,
+ *     `to` varchar(50) NOT NULL,
+ *     `from` varchar(50) NOT NULL,
+ *     `nick` varchar(20) DEFAULT NULL COMMENT 'from nick',
+ *     `body` text,
+ *     `style` varchar(150) DEFAULT NULL,
+ *     `timestamp` double DEFAULT NULL,
+ *     `todel` tinyint(1) NOT NULL DEFAULT '0',
+ *     `fromdel` tinyint(1) NOT NULL DEFAULT '0',
+ *     `created_at` date DEFAULT NULL,
+ *     `updated_at` date DEFAULT NULL,
+ *     PRIMARY KEY (`id`),
+ *     KEY `todel` (`todel`),
+ *     KEY `fromdel` (`fromdel`),
+ *     KEY `timestamp` (`timestamp`),
+ *     KEY `to` (`to`),
+ *     KEY `from` (`from`),
+ *     KEY `send` (`send`)
+ * ) ENGINE=MyISAM;
  * </pre>
  * 
  * @author Ery Lee <ery.lee at gmail.com>
@@ -59,85 +59,96 @@ import webim.WebimHistory;
 public class WebimHistoryDao {
 
 	/**
-	 * ²åÈëÒ»ÌõÁÄÌì¼ÇÂ¼£¬²Î¿¼¿â±íÓëWebimHistory×Ö¶Î¡£
+	 * æ’å…¥ä¸€æ¡èŠå¤©è®°å½•ï¼Œå‚è€ƒåº“è¡¨ä¸WebimHistoryå­—æ®µã€‚
 	 * 
-	 * @param history ÁÄÌì¼ÇÂ¼
+	 * @param history
+	 *            èŠå¤©è®°å½•
 	 */
 	public void insert(WebimHistory history) {
 		// TODO Auto-generated method stub
 	}
 
 	/**
-	 * ¶ÁÈ¡ÓëwithÓÃ»§ÁÄÌì¼ÇÂ¼£¬²éÑ¯Âß¼­:<br>
+	 * è¯»å–ä¸withç”¨æˆ·èŠå¤©è®°å½•ï¼ŒæŸ¥è¯¢é€»è¾‘:<br>
+	 * 
 	 * <pre>
 	 *     if (type == "chat")
-     *       {
-     *           
-     *           "SELECT * FROM webim_Histories WHERE `type` = 'chat' 
-     *           AND ((`to`=%s AND `from`=%s AND `fromdel` != 1) 
-     *           OR (`send` = 1 AND `from`=%s AND `to`=%s AND `todel` != 1))  
-     *           ORDER BY timestamp DESC LIMIT %d", $with, $uid, $with, $uid, $limit );
-     *           
-     *       }
-     *       else
-     *       {
-     *           
-     *           "SELECT * FROM  webim_histories 
-     *               WHERE `to`=%s AND `type`='grpchat' AND send = 1 
-     *               ORDER BY timestamp DESC LIMIT %d", , $with, $limit);
-     *           
-     *       }
+	 *       {
+	 *           
+	 *           "SELECT * FROM webim_Histories WHERE `type` = 'chat' 
+	 *           AND ((`to`=%s AND `from`=%s AND `fromdel` != 1) 
+	 *           OR (`send` = 1 AND `from`=%s AND `to`=%s AND `todel` != 1))  
+	 *           ORDER BY timestamp DESC LIMIT %d", $with, $uid, $with, $uid, $limit );
+	 *           
+	 *       }
+	 *       else
+	 *       {
+	 *           
+	 *           "SELECT * FROM  webim_histories 
+	 *               WHERE `to`=%s AND `type`='grpchat' AND send = 1 
+	 *               ORDER BY timestamp DESC LIMIT %d", , $with, $limit);
+	 *           
+	 *       }
 	 * </pre>
-	 * @param uid µ±Ç°ÓÃ»§id
-	 * @param with ¶Ô·½id£¬¿É¸ù¾İĞèÒª×ª»»Îªlong
-	 * @param type ¼ÇÂ¼ÀàĞÍ£ºchat | grpchat
-	 * @return ÁÄÌì¼ÇÂ¼
+	 * 
+	 * @param uid
+	 *            å½“å‰ç”¨æˆ·id
+	 * @param with
+	 *            å¯¹æ–¹idï¼Œå¯æ ¹æ®éœ€è¦è½¬æ¢ä¸ºlong
+	 * @param type
+	 *            è®°å½•ç±»å‹ï¼šchat | grpchat
+	 * @return èŠå¤©è®°å½•
 	 */
 	public List<WebimHistory> getHistories(long uid, String with, String type) {
 		// TODO Auto-generated method stub
 		return new ArrayList<WebimHistory>();
 	}
 
-
 	/**
-	 * Çå³ıÓëwithÓÃ»§ÁÄÌì¼ÇÂ¼£¬SQL½Å±¾:<br>
+	 * æ¸…é™¤ä¸withç”¨æˆ·èŠå¤©è®°å½•ï¼ŒSQLè„šæœ¬:<br>
 	 * 
-	 *  "UPDATE webim_histories SET fromdel = 1 Where from = @0 and to = @1 and type = 'chat'"<br>
-     *  "UPDATE webim_histories SET todel = 1 Where to = @0 and from = @1 and type = 'chat'"<br>
-     *  "DELETE FROM webim_histories WHERE fromdel = 1 AND todel = 1"
-     *  
-	 * @param uid ÓÃ»§uid
-	 * @param with ¶Ô·½id,¿É¸ù¾İĞèÒª×ª»»Îªlong
+	 * "UPDATE webim_histories SET fromdel = 1 Where from = @0 and to = @1 and type = 'chat'"
+	 * <br>
+	 * "UPDATE webim_histories SET todel = 1 Where to = @0 and from = @1 and type = 'chat'"
+	 * <br>
+	 * "DELETE FROM webim_histories WHERE fromdel = 1 AND todel = 1"
+	 * 
+	 * @param uid
+	 *            ç”¨æˆ·uid
+	 * @param with
+	 *            å¯¹æ–¹id,å¯æ ¹æ®éœ€è¦è½¬æ¢ä¸ºlong
 	 */
 	public void clearHistories(long uid, String with) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	/**
-	 * ¶ÁÈ¡ÓÃ»§µÄÀëÏßÏûÏ¢£¬SQL½Å±¾:<br>
+	 * è¯»å–ç”¨æˆ·çš„ç¦»çº¿æ¶ˆæ¯ï¼ŒSQLè„šæœ¬:<br>
 	 * 
-	 * "SELECT * FROM  webim_histories WHERE `to` = ? and send != 1 ORDER BY timestamp DESC LIMIT %d", limit;
+	 * "SELECT * FROM  webim_histories WHERE `to` = ? and send != 1 ORDER BY timestamp DESC LIMIT %d"
+	 * , limit;
 	 * 
-	 * @param uid ÓÃ»§uid
-	 * @return ·µ»ØÀëÏßÏûÏ¢
+	 * @param uid
+	 *            ç”¨æˆ·uid
+	 * @return è¿”å›ç¦»çº¿æ¶ˆæ¯
 	 */
 	public List<WebimHistory> getOfflineMessages(long uid) {
 		// TODO Auto-generated method stub
 		return new ArrayList<WebimHistory>();
 	}
 
-
 	/**
-	 * ÀëÏßÏûÏ¢×ª»»ÎªÀúÊ·ÏûÏ¢£¬SQL½Å±¾:<br>
+	 * ç¦»çº¿æ¶ˆæ¯è½¬æ¢ä¸ºå†å²æ¶ˆæ¯ï¼ŒSQLè„šæœ¬:<br>
 	 * 
 	 * "UPDATE webim_histories SET send = 1 where to = ? and send = 0");
 	 * 
-	 * @param uid ÓÃ»§uid
+	 * @param uid
+	 *            ç”¨æˆ·uid
 	 */
 	public void offlineMessageToHistory(long uid) {
 		// TODO Auto-generated method stub
-		
 	}
 
 }
+

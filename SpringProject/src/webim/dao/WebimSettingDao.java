@@ -24,19 +24,19 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * webim_settingsÊı¾İ¿â±í<br>
+ * webim_settingsæ•°æ®åº“è¡¨<br>
  * 
  * <pre>
  * CREATE TABLE webim_settings(
- *	    `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
- *	    `uid` mediumint(8) unsigned NOT NULL,
- *	    `web` blob,
- *	    `air` blob,
- *	    `created_at` DATETIME DEFAULT NULL,
- *	    `updated_at` DATETIME DEFAULT NULL,
- *	    PRIMARY KEY (`id`)
- *	)ENGINE=MyISAM;
- *	</pre>
+ *     `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+ *     `uid` mediumint(8) unsigned NOT NULL,
+ *     `web` blob,
+ *     `air` blob,
+ *     `created_at` DATETIME DEFAULT NULL,
+ *     `updated_at` DATETIME DEFAULT NULL,
+ *     PRIMARY KEY (`id`)
+ * )ENGINE=MyISAM;
+ * </pre>
  * 
  * @author Ery Lee <ery.lee at gmail.com>
  * @since 1.0
@@ -44,16 +44,20 @@ import java.util.Map;
 public class WebimSettingDao {
 
 	public static Map<String, String> settings = new HashMap<String, String>();
-	
+
 	/**
-	 * ÉèÖÃÓÃ»§ÅäÖÃÊı¾İ¡£<br>
+	 * è®¾ç½®ç”¨æˆ·é…ç½®æ•°æ®ã€‚<br>
 	 * 
 	 * <ol>
-	 * <li> Êı¾İ¿âSQL½Å±¾: "update webim_settings set data =@0  where uid = @1", uid, data</li>
-	 * <li> Ó¦¸ÃÏÈ¶ÁÈ¡ÅäÖÃ¼ì²éÊÇ·ñ´æÔÚ£¬Èç²»´æÔÚ²åÈë£¬´æÔÚ¸üĞÂ¡£</li>
+	 * <li>æ•°æ®åº“SQLè„šæœ¬: "update webim_settings set data =@0  where uid = @1", uid,
+	 * data</li>
+	 * <li>åº”è¯¥å…ˆè¯»å–é…ç½®æ£€æŸ¥æ˜¯å¦å­˜åœ¨ï¼Œå¦‚ä¸å­˜åœ¨æ’å…¥ï¼Œå­˜åœ¨æ›´æ–°ã€‚</li>
 	 * </ol>
-	 * @param uid ÓÃ»§uid
-	 * @param data ÅäÖÃÊı¾İ£¬JSON¸ñÊ½
+	 * 
+	 * @param uid
+	 *            ç”¨æˆ·uid
+	 * @param data
+	 *            é…ç½®æ•°æ®ï¼ŒJSONæ ¼å¼
 	 */
 	public void set(long uid, String data) {
 		// TODO Auto-generated method stub
@@ -61,26 +65,26 @@ public class WebimSettingDao {
 	}
 
 	/**
-	 * ¶ÁÈ¡ÓÃ»§ÅäÖÃÊı¾İ¡£<br>
+	 * è¯»å–ç”¨æˆ·é…ç½®æ•°æ®ã€‚<br>
 	 * 
 	 * <ol>
-	 * <li>Êı¾İ¿â²éÑ¯SQL½Å±¾£º"select data from webim_settings where uid = ?", uid </li>
-	 * <li> Èç¹ûdataÎª¿Õ£¬·µ»Ø: "{}"</li>
+	 * <li>æ•°æ®åº“æŸ¥è¯¢SQLè„šæœ¬ï¼š"select data from webim_settings where uid = ?", uid</li>
+	 * <li>å¦‚æœdataä¸ºç©ºï¼Œè¿”å›: "{}"</li>
 	 * </ol>
 	 * 
-	 * @param uid ÓÃ»§uid
-	 * @return ÅäÖÃÊı¾İ£¬JSON¸ñÊ½
+	 * @param uid
+	 *            ç”¨æˆ·uid
+	 * @return é…ç½®æ•°æ®ï¼ŒJSONæ ¼å¼
 	 */
 	public String get(long uid) {
 		/**
-		 * TODO: 
+		 * TODO:
 		 */
 		String json = WebimSettingDao.settings.get(String.valueOf(uid));
-		if(json == null) {
+		if (json == null) {
 			json = "{}";
 		}
 		return json;
 	}
 
 }
-
