@@ -124,7 +124,7 @@ public class WebimController {
 			data.put("buddies", rtBuddies.toArray());
 			data.put("groups", groups1.toArray());
 			data.put("rooms", groups1.toArray());
-			data.put("server_time", System.currentTimeMillis() / 1000.0);
+			data.put("server_time", System.currentTimeMillis()); //TODO: / 1000.0
 			data.put("user", client.getEndpoint());
 		} catch (Exception e) {
 			data.put("success", false);
@@ -172,7 +172,7 @@ public class WebimController {
 
 		WebimClient c = WebimService.instance().currentClient(ticket);
 		WebimMessage msg = new WebimMessage(to, c.getEndpoint().getNick(),
-				body, style, System.currentTimeMillis() / 1000.0);
+				body, style, System.currentTimeMillis()); //TODO: / 1000.0
 		msg.setType(type);
 		c.publish(msg);
 		if (body != null && !body.startsWith("webim-event:")) {
