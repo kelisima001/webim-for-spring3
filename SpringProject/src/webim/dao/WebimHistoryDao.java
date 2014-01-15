@@ -23,7 +23,7 @@ package webim.dao;
 import java.util.ArrayList;
 import java.util.List;
 
-import webim.WebimHistory;
+import webim.client.WebimHistory;
 
 /**
  * webim_histories数据库表，存储聊天记录。<br>

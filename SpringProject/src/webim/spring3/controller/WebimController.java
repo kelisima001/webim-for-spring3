@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -18,17 +19,18 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import webim.WebimClient;
+import webim.client.WebimClient;
 import webim.config.WebimConfig;
-import webim.WebimEndpoint;
-import webim.WebimGroup;
-import webim.WebimHistory;
-import webim.WebimMenu;
-import webim.WebimMessage;
-import webim.WebimNotification;
-import webim.WebimPresence;
-import webim.WebimStatus;
+import webim.client.WebimEndpoint;
+import webim.client.WebimGroup;
+import webim.client.WebimHistory;
+import webim.client.WebimMenu;
+import webim.client.WebimMessage;
+import webim.client.WebimNotification;
+import webim.client.WebimPresence;
+import webim.client.WebimStatus;
 import webim.service.WebimService;
+
 
 @Controller()
 @RequestMapping("/Webim")

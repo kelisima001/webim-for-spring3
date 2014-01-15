@@ -23,10 +23,10 @@ package webim.dao;
 import java.util.ArrayList;
 import java.util.List;
 
-import webim.WebimEndpoint;
-import webim.WebimGroup;
-import webim.WebimMenu;
-import webim.WebimNotification;
+import webim.client.WebimEndpoint;
+import webim.client.WebimGroup;
+import webim.client.WebimMenu;
+import webim.client.WebimNotification;
 
 /**
  * WebimDao从数据库中读取好友关系、群组关系。
