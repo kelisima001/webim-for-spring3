@@ -5,8 +5,8 @@
  * Copyright (c) 2013 Arron
  * Released under the MIT, BSD, and GPL Licenses.
  *
- * Date: Tue Dec 3 12:12:10 2013 +0800
- * Commit: 0fa3012c239697baeb23936584d38fa0de21b218
+ * Date: Fri Jan 10 21:26:30 2014 +0800
+ * Commit: 6c4d6a83334b2bfde22e16fe87424f2f0749b6c8
  */
 (function(window, document, undefined){
 
@@ -1349,7 +1349,13 @@ extend(webim.prototype, {
 		self.trigger("online",[data]);
 		self._createConnect();
 		//handle new messages at last
-		var n_msg = data.new_messages;
+		var n_msg = [];
+		if( data.new_messages ) {
+			n_msg = n_msg.concat( data.new_messages );
+		}
+		if( data.offline_messages ) {
+			n_msg = n_msg.concat( data.offline_messages );
+		}
 		if(n_msg && n_msg.length){
 			each(n_msg, function(n, v){
 				v["new"] = true;
@@ -1692,12 +1698,12 @@ model("setting",{
 	}
 } );
 /*
-* 状态(cookie临时存储[刷新页面有效])
-* 
-* get(key);//get
-* set(key,value);//set
-* clear()
-*/
+ * 状态(cookie临时存储[刷新页面有效])
+ * 
+ * get(key);//get
+ * set(key,value);//set
+ * clear()
+ */
 //var d = {
 //        tabs:{1:{n:5}}, // n -> notice count
 //        tabIds:[1],
@@ -1712,8 +1718,22 @@ model( "status", {
 }, {
 	_init:function() {
 		var self = this, data = self.data, key = self.options.key;
+		var store = window.localStorage;
+		if( store ) {
+			//无痕浏览模式
+			try {
+				var testKey = '__store_webim__'
+				store.setItem(testKey, testKey)
+				if (store.getItem(testKey) == testKey) { 
+					self.store = store;
+				}
+				store.removeItem(testKey);
+			} catch(e) {
+				self.store = undefined;
+			}
+		}
 		if ( !data ) {
-			var c = window.localStorage ? window.localStorage.getItem( key ) : cookie( key );
+			var c = self.store ? self.store.getItem( key ) : cookie( key );
 			self.data = c ? JSON.parse( c ) : {};
 		}else{
 			self._save( data );
@@ -1741,7 +1761,7 @@ model( "status", {
 		var self = this, key = self.options.key;
 		self.data = data;
 		data = JSON.stringify( data );
-		window.localStorage ? window.localStorage.setItem( key, data ) : cookie( key, data, {
+		self.store ? self.store.setItem( key, data ) : cookie( key, data, {
 			path: '/',
 			domain: document.domain
 		} );
@@ -2131,8 +2151,8 @@ model("history", {
  * Copyright (c) 2013 Arron
  * Released under the MIT, BSD, and GPL Licenses.
  *
- * Date: Fri Dec 20 15:54:21 2013 +0800
- * Commit: 874feb8af9ee874df878f9a9617a43f1b7ef864f
+ * Date: Fri Jan 10 22:23:54 2014 +0800
+ * Commit: ac2b3a60253163624266c5a7a92c1dd0bac27cc7
  */
 (function(window,document,undefined){
 
@@ -3522,7 +3542,8 @@ widget("layout",{
 		var w = (windowWidth() - 45) - $.shortcut.offsetWidth - $.widgets.offsetWidth - 70;
 		self.maxVisibleTabs = parseInt(w / self.tabWidth);
 		self._fitUI();
-		self._autoResizeWindow();
+		if( !self.options.disableResize )
+			self._autoResizeWindow();
 		self._ready = true;
 	},
 	_autoResizeWindow: function(){
@@ -4163,8 +4184,12 @@ widget("upload", {
 				if( !data.url || data.error ) {
 					alert( data.error || 'Upload error' );
 				} else {
-					var markup = ["image/jpeg","image/jpg","image/gif","image/png"].indexOf(data.type) == -1 
-						? "" : "!";
+					var markup = "", ar = ["image/jpeg","image/jpg","image/gif","image/png"];
+					for (var i = 0; i < ar.length; i++) {
+						if( ar[i] == data.type ) {
+							markup = "!";break;
+						}
+					};
 					markup += "["+(data.name || "").replace(/\[|\]/ig, "")+"]("+data.url+")";
 					if( data.thumbnailUrl )
 						markup += "("+data.thumbnailUrl+")";
@@ -4461,7 +4486,7 @@ widget("chat",{
 			nick: options.user.nick,
 			to_nick: info.nick,
 			//stype: '',
-			offline: info.presence != "online",
+			offline: info.presence != "online" ? "true" : "false",
 			timestamp: (new Date()).getTime() - date.timeSkew,
 			body: val
 		};
@@ -5173,7 +5198,6 @@ app("buddy", function( options ){
 	//some buddies offline.
 	buddy.bind("offline", function( e, data){
 		if ( options.showUnavailable ) {
-			console.log( 111 );
 			buddyUI.remove(map(data, mapId));
 			buddyUI.add(data);
 			//buddyUI.update(data);
@@ -5513,6 +5537,9 @@ app("room", function( options ) {
 				}, i*500);
 			})(msg, i);
 		};
+	}).bind("exit", function(e, id){
+		room.block( id );
+		layout.removeChat("room",id);
 	});
 	im.bind("event", function( e, events ) {
 		for (var i = 0; i < events.length; i++) {
@@ -5613,7 +5640,7 @@ widget("room",{
 	</div>\
 	<div id=":actions" class="webim-room-actions"><a id=":create" href="#" class="webim-button ui-state-default ui-corner-all"><%=create discussion%></a></div>\
 	</div>',
-	tpl_li: '<li title=""><input class="webim-button ui-state-default ui-corner-all" type="button" value="<%=invite%>" /><a href="<%=url%>" rel="<%=id%>" class="ui-helper-clearfix"><div id=":tabCount" class="webim-window-tab-count">0</div><img width="25" src="<%=pic_url%>" defaultsrc="<%=default_pic_url%>" onerror="var d=this.getAttribute(\'defaultsrc\');if(d && this.src!=d)this.src=d;" /><strong><%=nick%></strong></a></li>'
+	tpl_li: '<li title=""><input class="webim-button ui-state-default ui-corner-all" type="button" value="<%=exit%>" /><input class="webim-button ui-state-default ui-corner-all" type="button" value="<%=invite%>" /><a href="<%=url%>" rel="<%=id%>" class="ui-helper-clearfix"><div id=":tabCount" class="webim-window-tab-count">0</div><img width="25" src="<%=pic_url%>" defaultsrc="<%=default_pic_url%>" onerror="var d=this.getAttribute(\'defaultsrc\');if(d && this.src!=d)this.src=d;" /><strong><%=nick%></strong></a></li>'
 },{
 	_init: function(){
 		var self = this;
@@ -5665,7 +5692,7 @@ widget("room",{
 		toggleClass(this.element, "webim-room-scroll", is);
 	},
 	_updateInfo:function(el, info){
-		el = el.firstChild.nextSibling;
+		el = el.firstChild.nextSibling.nextSibling;
 		el.setAttribute("href", info.url);
 		el = el.firstChild.nextSibling;
 		el.setAttribute("defaultsrc", info.default_pic_url ? info.default_pic_url : "");
@@ -5681,14 +5708,20 @@ widget("room",{
 			if(!info.default_pic_url)info.default_pic_url = "";
 			var el = li[id] = createElement(tpl(self.options.tpl_li, info));
 			//self._updateInfo(el, info);
-			var a = el.firstChild;
+			var exit = el.firstChild;
+			var a = el.firstChild.nextSibling;
 			if( info.temporary ) {
+				addEvent(exit, "click",function(e){
+					preventDefault(e);
+					self.trigger( "exit", [id] );
+				});
 				addEvent(a, "click",function(e){
 					preventDefault(e);
 					self.updateDiscussion( info );
 				});
 			} else {
 				hide( a );
+				hide( exit );
 			}
 			addEvent(a.nextSibling, "click",function(e){
 				preventDefault(e);
