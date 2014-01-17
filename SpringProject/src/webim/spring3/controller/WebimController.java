@@ -38,7 +38,7 @@ public class WebimController {
 
 	public static final String SUCCESS = "ok";
 
-	@RequestMapping("/boot")
+	@RequestMapping("/boot")	
 	public ModelAndView boot() {
 		String message = "Webim Booting... ";
 		//System.out.println(message);
