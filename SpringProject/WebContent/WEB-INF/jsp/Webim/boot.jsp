@@ -6,6 +6,7 @@
                 version: '5.2',
                 path: '/SpringProject/',
                 is_login: true,
+                is_visitor: false,
                 user: '',
                 setting: '{}',
                 menu: '',
