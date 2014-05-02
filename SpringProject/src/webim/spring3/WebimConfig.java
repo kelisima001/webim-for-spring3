@@ -18,22 +18,27 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package webim.config;
+package webim.spring3;
+
+import java.util.Map;
+
+import java.util.HashMap;
 
 /**
- * 测试的配置文件，配置消息服务器的地址、端口、通信domain、apikey。<br>
+ *
+ * 测试的配置文件，配置消息服务器的地址、端口、通信DOMAIN、APIKEY。<br>
  * 
  * TODO: 正式项目配置应写在XML文件或者数据库中。
- * 
- * @author Ery Lee <ery.lee at gmail.com>
- * @since 1.0
+ *
+ * @author erylee <ery.lee at gmail.com>
+ *
  */
 public class WebimConfig {
-
+	
 	/**
 	 * Webim库版本
 	 */
-	public static final String VERSION = "5.2";
+	public static final String VERSION = "5.4.1";
 
 	/**
 	 * 是否开启
@@ -86,6 +91,11 @@ public class WebimConfig {
 	public static final boolean ENABLE_ROOM = true;
 
 	/**
+	 * 临时讨论组
+	 */
+	public static final boolean ENABLE_DISCUSSION = true;
+	
+	/**
 	 * 显示通知按钮
 	 */
 	public static final boolean ENABALE_NOTI = true;
@@ -113,11 +123,52 @@ public class WebimConfig {
 	/**
 	 * 支持访客
 	 */
-	public static final boolean ENABLE_VISITOR = true;
+	public static final boolean ENABLE_VISITOR = false;
 
 	/**
 	 * 支持文件上传
 	 */
 	public static final boolean ENABLE_UPLOAD = false;
+	
+	private Map<String, Object> data;
+
+	public WebimConfig() {
+		data = new HashMap<String, Object>();
+		data.put("version", VERSION);
+		data.put("isopen", Boolean.valueOf(ISOPEN));
+		data.put("domain", DOMAIN);
+		data.put("apikey", APIKEY);
+		data.put("host", HOST);
+		data.put("port", Integer.valueOf(PORT));
+		data.put("theme", THEME);
+		data.put("local", LOCAL);
+		data.put("emot", EMOT);
+		data.put("opacity", Integer.valueOf("opacity"));
+		data.put("enable_room", Boolean.valueOf(ENABLE_ROOM));
+		data.put("enable_discussion", Boolean.valueOf(ENABLE_DISCUSSION));
+		data.put("enable_noti", Boolean.valueOf(ENABALE_NOTI));
+		data.put("enable_shortcut", Boolean.valueOf(ENABLE_SHORTCUT));
+		data.put("enable_chatlink", Boolean.valueOf(ENABLE_CHATLINK));
+		data.put("enable_menu", Boolean.valueOf(ENABLE_MENU));
+		data.put("show_unavailable", Boolean.valueOf(SHOW_UNAVAILABLE));
+		data.put("enable_visitor", Boolean.valueOf(ENABLE_VISITOR));
+		data.put("enable_upload", Boolean.valueOf(ENABLE_UPLOAD));
+	}
+
+	/**
+	 * 读取配置
+	 * 
+	 * @param key
+	 * 
+	 * @return value
+	 */
+	public Object get(String key) {
+		return data.get(key);
+	}
+	
+	public boolean getBoolean(String key) {
+		return ((Boolean)get(key)).booleanValue();
+	}
+	
 	
 }

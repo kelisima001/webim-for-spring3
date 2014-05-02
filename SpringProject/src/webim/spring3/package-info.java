@@ -5,4 +5,4 @@
  * @author erylee
  *
  */
-package webim.config;
+package webim.spring3;
