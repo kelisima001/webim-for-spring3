@@ -27,7 +27,7 @@ implements these methods:
 
 ```java
 
-1.  public WebimEndpoint endpoint() 
+1.  public WebimEndpoint endpoint();
 
 2.  public List<WebimEndpoint> buddies(String uid);
 
