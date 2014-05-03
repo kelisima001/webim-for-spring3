@@ -58,7 +58,7 @@ public class WebimConfig {
 	/**
 	 * 消息服务器地址
 	 */
-	public static final String HOST = "localhost";
+	public static final String HOST = "t.nextalk.im";
 
 	/**
 	 * 消息服务器端口
