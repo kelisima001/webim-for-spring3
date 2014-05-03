@@ -6,11 +6,11 @@ webim for spring mvc3.2
 Demo
 ====
 
-1. Import 'SprintProject' Project to Eclipse EE.
+1. Import 'WebimProject' Project to Eclipse EE.
 
 2. Create Tomcat Server and Run
 
-3. Access: http://localhost:8080/SpringProject/
+3. Access: http://localhost:8080/WebimProject/
 
 Developer Guide
 ===============
@@ -20,26 +20,33 @@ Create Database
 
 import install.sql
 
+Coding WebimPlugin.java
+-----------------------
 
-Coding Dao
-----------
+implements these methods:
 
-1. WebimHistoryDao.java
+1.  public WebimEndpoint endpoint() 
 
-2. WebimSettingDao.java
+2.  public List<WebimEndpoint> buddies(String uid);
 
-3. WebimDao.java
+3.  List<WebimEndpoint> buddiesByIds(String uid, String[] ids);
 
+4.  public WebimRoom findRoom(String roomId);
 
-Coding Service
---------------
+5.  public List<WebimRoom> rooms(String uid);
 
-WebimService.java, modify these methods:
+6.  public List<WebimRoom> roomsByIds(String uid, String[] ids);
 
-1. public long currentUid(): should return current login uid
+8.  public List<WebimMember> members(String roomId);
 
-2. public WebimEndpoint currentEndpoint(): should return current endpoint
+9.  public List<WebimNotification> notifications(String uid);
 
+Coding WebimModel.java
+-----------------------
+
+1. Histories
+
+2. Settings
 
 Coding Config
 -------------
@@ -51,4 +58,6 @@ Insert Webim Javascript
 
 Insert Javascript code below to web pages that need to display Webim:
 
-	<script type="text/javascript" src="/SpringProject/Webim/boot.html"></script>
+	<script type="text/javascript" src="/WebimProject/Webim/boot.html"></script>
+
+
