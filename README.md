@@ -25,6 +25,8 @@ Coding WebimPlugin.java
 
 implements these methods:
 
+```java
+
 1.  public WebimEndpoint endpoint() 
 
 2.  public List<WebimEndpoint> buddies(String uid);
@@ -40,6 +42,8 @@ implements these methods:
 8.  public List<WebimMember> members(String roomId);
 
 9.  public List<WebimNotification> notifications(String uid);
+
+```
 
 Coding WebimModel.java
 -----------------------
