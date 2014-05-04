@@ -20,6 +20,7 @@ Create Database
 
 import install.sql
 
+
 Coding WebimPlugin.java
 -----------------------
 
@@ -57,7 +58,7 @@ Coding Config
 
 You should change the WebimConfig.java, and load configurations from database or xml.
 
-Insert Webim Javascript
+Webim Javascript
 -----------------------
 
 Insert Javascript code below to web pages that need to display Webim:
