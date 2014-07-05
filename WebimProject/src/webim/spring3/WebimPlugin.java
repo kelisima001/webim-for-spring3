@@ -47,7 +47,7 @@ public class WebimPlugin {
 	public WebimEndpoint endpoint() {
 		// TODO: 应替换该代码，返回集成系统的当前用户。
 		WebimEndpoint ep = new WebimEndpoint("1", "user1");
-		ep.setPic_url("https://1.gravatar.com/avatar/136e370cbf1cf500cbbf791e56dac614?d=https%3A%2F%2Fidenticons.github.com%2F577292a0aa8cb84aa3e6f06fee6f711c.png&s=70"); // �û�ͷ��
+		ep.setAvatar("https://1.gravatar.com/avatar/136e370cbf1cf500cbbf791e56dac614?d=https%3A%2F%2Fidenticons.github.com%2F577292a0aa8cb84aa3e6f06fee6f711c.png&s=70"); // �û�ͷ��
 		ep.setShow("available");
 		ep.setUrl(""); // 用户空间
 		ep.setStatus(""); // 用户状态
@@ -78,10 +78,10 @@ public class WebimPlugin {
 		//TODO: DEMO CODE
 		List<WebimEndpoint> buddies = new ArrayList<WebimEndpoint>();
 		WebimEndpoint e = new WebimEndpoint("1", "user1");
-		e.setPic_url("https://1.gravatar.com/avatar/136e370cbf1cf500cbbf791e56dac614?d=https%3A%2F%2Fidenticons.github.com%2F577292a0aa8cb84aa3e6f06fee6f711c.png&s=50");
+		e.setAvatar("https://1.gravatar.com/avatar/136e370cbf1cf500cbbf791e56dac614?d=https%3A%2F%2Fidenticons.github.com%2F577292a0aa8cb84aa3e6f06fee6f711c.png&s=50");
 		buddies.add(e);
 		e = new WebimEndpoint("2", "user2");
-		e.setPic_url("https://1.gravatar.com/avatar/136e370cbf1cf500cbbf791e56dac614?d=https%3A%2F%2Fidenticons.github.com%2F577292a0aa8cb84aa3e6f06fee6f711c.png&s=50");
+		e.setAvatar("https://1.gravatar.com/avatar/136e370cbf1cf500cbbf791e56dac614?d=https%3A%2F%2Fidenticons.github.com%2F577292a0aa8cb84aa3e6f06fee6f711c.png&s=50");
 		buddies.add(e);
 		return buddies;
 	}
@@ -97,10 +97,10 @@ public class WebimPlugin {
 	List<WebimEndpoint> buddiesByIds(String uid, String[] ids) {
 		List<WebimEndpoint> buddies = new ArrayList<WebimEndpoint>();
 		WebimEndpoint e = new WebimEndpoint("1", "user1");
-		e.setPic_url("https://1.gravatar.com/avatar/136e370cbf1cf500cbbf791e56dac614?d=https%3A%2F%2Fidenticons.github.com%2F577292a0aa8cb84aa3e6f06fee6f711c.png&s=50");
+		e.setAvatar("https://1.gravatar.com/avatar/136e370cbf1cf500cbbf791e56dac614?d=https%3A%2F%2Fidenticons.github.com%2F577292a0aa8cb84aa3e6f06fee6f711c.png&s=50");
 		buddies.add(e);
 		e = new WebimEndpoint("2", "user2");
-		e.setPic_url("https://1.gravatar.com/avatar/136e370cbf1cf500cbbf791e56dac614?d=https%3A%2F%2Fidenticons.github.com%2F577292a0aa8cb84aa3e6f06fee6f711c.png&s=50");
+		e.setAvatar("https://1.gravatar.com/avatar/136e370cbf1cf500cbbf791e56dac614?d=https%3A%2F%2Fidenticons.github.com%2F577292a0aa8cb84aa3e6f06fee6f711c.png&s=50");
 		buddies.add(e);
 		return buddies;
 
@@ -116,7 +116,7 @@ public class WebimPlugin {
 		// TODO: 示例代码，需要替换
 		if(roomId.equals("room1")) {
 			WebimRoom room = new WebimRoom("room1", "Room1");
-			room.setPic_url("/WebimProject/static/images/room.png");
+			room.setAvatar("/WebimProject/static/images/room.png");
 			return room;
 		}
 		return null;
@@ -144,7 +144,7 @@ public class WebimPlugin {
 		// TODO: 示例代码，需要替换
 		List<WebimRoom> rooms = new ArrayList<WebimRoom>();
 		WebimRoom room = new WebimRoom("room1", "Room1");
-		room.setPic_url("/WebimProject/static/images/room.png");
+		room.setAvatar("/WebimProject/static/images/room.png");
 		rooms.add(room);
 		return rooms;
 	}
@@ -163,7 +163,7 @@ public class WebimPlugin {
 		// TODO: 示例代码，需要替换
 		List<WebimRoom> rooms = new ArrayList<WebimRoom>();
 		WebimRoom room = new WebimRoom("room1", "Room1");
-		room.setPic_url("/WebimProject/static/images/room.png");
+		room.setAvatar("/WebimProject/static/images/room.png");
 		rooms.add(room);
 		return rooms;
     }
