@@ -2,4 +2,4 @@
  * @author erylee
  *
  */
-package webim.spring3;
+package webim;

@@ -18,7 +18,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package webim.spring3;
+package webim;
 
 import java.util.ArrayList;
 import java.util.Collection;
