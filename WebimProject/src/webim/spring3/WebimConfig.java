@@ -108,7 +108,7 @@ public class WebimConfig {
 	/**
 	 * 支持聊天链接
 	 */
-	public static final boolean ENABLE_CHATLINK = false;
+	public static final boolean ENABLE_CHATLINK = true;
 
 	/**
 	 * 显示菜单栏
