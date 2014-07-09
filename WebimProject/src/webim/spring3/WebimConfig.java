@@ -38,7 +38,7 @@ public class WebimConfig {
 	/**
 	 * Webim库版本
 	 */
-	public static final String VERSION = "5.4.1";
+	public static final String VERSION = "5.5";
 
 	/**
 	 * 是否开启

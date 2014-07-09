@@ -60,19 +60,14 @@ public class WebimController {
 
 	private WebimPlugin plugin = null;
 
-	private WebimClient client = null;
-
-	private WebimEndpoint endpoint = null;
-
 	public WebimController() {
 		this.config = new WebimConfig();
 		this.model = new WebimModel();
 		this.plugin = new WebimPlugin();
-		this.endpoint = this.plugin.endpoint();
 	}
 
-	private String currentUid() {
-		return this.endpoint.getId();
+	private WebimEndpoint currentEndpoint() {
+		return this.plugin.endpoint();
 	}
 
 	/**
@@ -83,21 +78,34 @@ public class WebimController {
 	 * @return 当前用户的Webim客户端
 	 */
 	private WebimClient client(String ticket) {
-		if (this.client == null) {
-			this.client = new WebimClient(this.endpoint,
-					(String) this.config.get("domain"),
-					(String) this.config.get("apikey"),
-					(String) this.config.get("host"),
-					((Integer) this.config.get("port")).intValue());
-			this.client.setTicket(ticket);
-		}
-		return this.client;
+		return client(currentEndpoint(), ticket);
+	}
+
+	/**
+	 * 根据当前endpoint、ticket，创建WebimClient实例
+	 * 
+	 * @param ep
+	 *            当前endpoint
+	 * @param ticket
+	 *            通信ticket
+	 * @return WebimClient实例
+	 */
+	private WebimClient client(WebimEndpoint ep, String ticket) {
+		WebimClient client = new WebimClient(currentEndpoint(),
+				(String) this.config.get("domain"),
+				(String) this.config.get("apikey"),
+				(String) this.config.get("host"),
+				((Integer) this.config.get("port")).intValue());
+		client.setTicket(ticket);
+		return client;
+
 	}
 
 	@RequestMapping("/boot")
 	public ModelAndView boot(HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
 		// System.out.println(message);
+		WebimEndpoint endpoint = currentEndpoint();
 		response.setHeader("Cache-Control", "no-cache");
 		Map<String, Object> data = new HashMap<String, Object>();
 		String[] keys = new String[] { "version", "theme", "local", "emot",
@@ -113,7 +121,7 @@ public class WebimController {
 		data.put("is_visitor", Boolean.FALSE);
 		data.put("login_options", "");
 		data.put("jsonp", false);
-		data.put("setting", this.model.getSetting(this.currentUid()));
+		data.put("setting", this.model.getSetting(endpoint.getId()));
 		return new ModelAndView("Webim/boot", data);
 	}
 
@@ -122,13 +130,16 @@ public class WebimController {
 	public Map<String, Object> online(HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
 		System.out.println("online.....");
+		WebimEndpoint endpoint = currentEndpoint();
+		String uid = endpoint.getId();
+		String show = request.getParameter("show");
+		if(show != null) { endpoint.setShow(show); }
 		Map<String, Object> data = new HashMap<String, Object>();
-		String uid = this.currentUid();
 		List<WebimEndpoint> buddies = this.plugin.buddies(uid);
 		List<WebimRoom> rooms = this.plugin.rooms(uid);
 		rooms.addAll(this.model.rooms(uid));
 		// Forward Online to IM Server
-		WebimClient client = this.client("");
+		WebimClient client = this.client(endpoint, "");
 		List<String> buddyIds = buddyIds(buddies);
 		List<String> roomIds = roomIds(rooms);
 		try {
@@ -147,9 +158,11 @@ public class WebimController {
 			while (it.hasNext()) {
 				String key = it.next();
 				WebimEndpoint buddy = buddyMap.get(key);
-				String show = presences.get(key);
-				buddy.setPresence("online");
-				buddy.setShow(show);
+				show = presences.get(key);
+				if(!show.equals("invisible")) {
+					buddy.setPresence("online");
+					buddy.setShow(show);
+				}
 			}
 
 			Collection<WebimEndpoint> rtBuddies;
@@ -162,12 +175,11 @@ public class WebimController {
 						rtBuddies.add(e);
 				}
 			}
-			data.remove("presences");
+			//data.remove("presences");
 			data.put("buddies", rtBuddies.toArray());
 			data.put("rooms", rooms.toArray());
 			data.put("server_time", System.currentTimeMillis()); // TODO: /
-																	// 1000.0
-			data.put("user", client.getEndpoint());
+			data.put("user", endpoint);
 		} catch (Exception e) {
 			data.put("success", false);
 			data.put("error_msg", "IM Server is not found");
@@ -199,7 +211,8 @@ public class WebimController {
 	@ResponseBody
 	public String message(HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
-		String uid = this.currentUid();
+		WebimEndpoint endpoint = currentEndpoint();
+		String uid = endpoint.getId();
 		String ticket = request.getParameter("ticket");
 		String type = request.getParameter("type");
 		if (type == null)
@@ -208,12 +221,10 @@ public class WebimController {
 		String to = request.getParameter("to");
 		String body = request.getParameter("body");
 		String style = request.getParameter("style");
-		if (style == null)
-			style = "";
-
-		WebimClient c = this.client(ticket);
-		WebimMessage msg = new WebimMessage(to, this.endpoint.getNick(), body,
-				style, System.currentTimeMillis()); // TODO: / 1000.0
+		if (style == null) style = "";
+		WebimClient c = this.client(endpoint, ticket);
+		WebimMessage msg = new WebimMessage(to, c.getEndpoint().getNick(),
+				body, style, System.currentTimeMillis()); // TODO: / 1000.0
 		msg.setType(type);
 		msg.setOffline(offline == "true" ? true : false);
 		c.publish(msg);
@@ -256,25 +267,28 @@ public class WebimController {
 	@ResponseBody
 	public List<WebimEndpoint> buddies(HttpServletRequest request,
 			HttpServletResponse response) {
+		WebimEndpoint endpoint = currentEndpoint();
 		String ids = request.getParameter("ids");
-		return this.plugin.buddiesByIds(this.currentUid(), ids.split(","));
+		return this.plugin.buddiesByIds(endpoint.getId(), ids.split(","));
 	}
 
 	@RequestMapping(value = "/history", method = RequestMethod.GET)
 	@ResponseBody
 	public List<WebimHistory> history(HttpServletRequest request,
 			HttpServletResponse response) {
+		WebimEndpoint endpoint = currentEndpoint();
 		String with = request.getParameter("id");
 		String type = request.getParameter("type");
-		return this.model.histories(this.currentUid(), with, type, 50);
+		return this.model.histories(endpoint.getId(), with, type, 50);
 	}
 
 	@RequestMapping(value = "/history/clear", method = RequestMethod.POST)
 	@ResponseBody
 	public String clearHistory(HttpServletRequest request,
 			HttpServletResponse response) {
+		WebimEndpoint endpoint = currentEndpoint();
 		String with = request.getParameter("id");
-		this.model.clearHistories(this.currentUid(), with);
+		this.model.clearHistories(endpoint.getId(), with);
 		return SUCCESS;
 	}
 
@@ -282,9 +296,10 @@ public class WebimController {
 	// @ResponseBody
 	public ModelAndView downloadHistory(HttpServletRequest request,
 			HttpServletResponse response) {
+		WebimEndpoint endpoint = currentEndpoint();
 		String with = request.getParameter("id");
 		String type = request.getParameter("type");
-		List<WebimHistory> histories = this.model.histories(this.currentUid(),
+		List<WebimHistory> histories = this.model.histories(endpoint.getId(),
 				with, type, 1000);
 		return new ModelAndView("Webim/download_history", "histories",
 				histories);
@@ -294,24 +309,25 @@ public class WebimController {
 	@ResponseBody
 	public WebimRoom inviteRoom(HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
-		String uid = this.currentUid();
+		WebimEndpoint endpoint = currentEndpoint();
+		String uid = endpoint.getId();
 		String roomId = request.getParameter("id");
 		String nick = request.getParameter("nick");
+		String ticket = request.getParameter("ticket");
+		WebimClient c = this.client(ticket);
 		WebimRoom room = this.model.findRoom(roomId);
 		if (room != null) {
 			room = this.model.createRoom(uid, roomId, nick);
 		}
-		this.model.joinRoom(roomId, uid, this.endpoint.getNick());
+		this.model.joinRoom(roomId, uid, c.getEndpoint().getNick());
 		String[] memberIds = request.getParameter("members").split(",");
 		List<WebimEndpoint> members = this.plugin.buddiesByIds(uid, memberIds);
 		this.model.inviteRoom(roomId, members);
 
-		String ticket = request.getParameter("ticket");
-		WebimClient c = this.client(ticket);
 		// send invite message to members
 		for (WebimEndpoint m : members) {
 			String body = "webim-event:invite|,|" + roomId + "|,|" + nick;
-			c.publish(new WebimMessage(m.getId(), this.endpoint.getNick(),
+			c.publish(new WebimMessage(m.getId(), c.getEndpoint().getNick(),
 					body, "", System.currentTimeMillis()));
 
 		}
@@ -380,8 +396,9 @@ public class WebimController {
 	@ResponseBody
 	public String blockRoom(HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
+		WebimEndpoint endpoint = currentEndpoint();
 		String room = request.getParameter("id");
-		this.model.blockRoom(room, this.currentUid());
+		this.model.blockRoom(room, endpoint.getId());
 		return SUCCESS;
 	}
 
@@ -389,8 +406,9 @@ public class WebimController {
 	@ResponseBody
 	public String unblockRoom(HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
+		WebimEndpoint endpoint = currentEndpoint();
 		String room = request.getParameter("id");
-		this.model.unblockRoom(room, this.currentUid());
+		this.model.unblockRoom(room, endpoint.getId());
 		return SUCCESS;
 	}
 
@@ -406,8 +424,9 @@ public class WebimController {
 	@ResponseBody
 	public String setting(HttpServletRequest request,
 			HttpServletResponse response) {
+		WebimEndpoint endpoint = currentEndpoint();
 		String data = request.getParameter("data");
-		this.model.saveSetting(this.currentUid(), data);
+		this.model.saveSetting(endpoint.getId(), data);
 		return SUCCESS;
 	}
 
@@ -415,13 +434,15 @@ public class WebimController {
 	@ResponseBody
 	public List<WebimNotification> notifications(HttpServletRequest request,
 			HttpServletResponse response) {
-		return this.plugin.notifications(this.currentUid());
+		WebimEndpoint endpoint = currentEndpoint();
+		return this.plugin.notifications(endpoint.getId());
 	}
 
 	@RequestMapping(value = "/menu", method = RequestMethod.GET)
 	@ResponseBody
 	public Collection<WebimMenu> menu() {
-		return this.plugin.menu(this.currentUid());
+		WebimEndpoint endpoint = currentEndpoint();
+		return this.plugin.menu(endpoint.getId());
 	}
 
 	private List<String> buddyIds(List<WebimEndpoint> buddies) {
