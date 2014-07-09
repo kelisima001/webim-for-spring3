@@ -373,9 +373,13 @@ public class WebimController {
 			return null;
 		JSONObject presences = this.client(ticket).members(roomId);
 		for (WebimMember member : members) {
-			if (presences.has(member.getId())) {
-				member.setPresence("online");
-				member.setShow(presences.getString(member.getId()));
+			String mid = member.getId();
+			if (presences.has(mid)) {
+				String show = presences.getString(mid);
+				if(!"invisible".equals(show)) {
+					member.setPresence("online");
+					member.setShow(presences.getString(mid));
+				}
 			}
 		}
 		return members;
