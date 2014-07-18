@@ -116,9 +116,9 @@ webim.ui.i18n.store('zh-CN',{
     "accept": "\u63a5\u53d7",
     "reject": "\u62d2\u7d55",
     "Remove Buddy": "\u786e\u5b9a\u8981\u5220\u9664\u597d\u53cb{{name}}\u5417?",
-    "Ask Initiate": "{{name}}\u8bf7\u6c42\u52a0\u60a8\u4e3a\u597d\u53cb",
-    "Ask Accepted": "{{name}}\u5df2\u63a5\u53d7\u60a8\u7684\u597d\u53cb\u8bf7\u6c42",
-    "Ask Rejected": "{{name}}\u62d2\u7edd\u60a8\u7684\u597d\u53cb\u8bf7\u6c42"
+    "Ask Initiate": "{{name}}\u8bf7\u6c42\u52a0\u60a8\u4e3a\u597d\u53cb({{time}})",
+    "Ask Accepted": "{{name}}\u5df2\u63a5\u53d7\u60a8\u7684\u597d\u53cb\u8bf7\u6c42({{time}})",
+    "Ask Rejected": "{{name}}\u62d2\u7edd\u60a8\u7684\u597d\u53cb\u8bf7\u6c42({{time}})"
 });
 
 webim.ui.i18n.store('zh-CN',{

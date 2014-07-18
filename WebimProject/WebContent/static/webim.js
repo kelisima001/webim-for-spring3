@@ -5,8 +5,8 @@
  * Copyright (c) 2014 Arron
  * Released under the MIT, BSD, and GPL Licenses.
  *
- * Date: Thu Jul 3 11:36:31 2014 +0800
- * Commit: 5a42251772f4a58f6a03b76864e18bf47acbe16a
+ * Date: Fri Jul 11 11:40:50 2014 +0800
+ * Commit: d4ca621cc222183abececea056397b561944979b
  */
 (function(window, document, undefined){
 
@@ -1443,7 +1443,10 @@ extend(webim.prototype, {
 		});
 
 		self.bind("presence", function( e, data ) {
-			buddy.presence( map( grep( data, grepPresence ), mapFrom ) );
+            var pl = grep( data, grepPresence );
+			buddy.presence( map( pl, mapFrom ) );
+            //fix issue #35
+            presence.update(pl);
 			data = grep( data, grepRoomPresence );
 			for (var i = data.length - 1; i >= 0; i--) {
                 /*
@@ -1959,6 +1962,15 @@ model( "presence", {
         }
     },
 
+    update: function(list) {
+        var self = this, data = {};
+        for(var i = 0; i < list.length; i++) {
+            var p = list[i];
+            data[p.from] = p.show;
+        }
+        self.set(data);
+    },
+
     clear: function() {
         var self = this;
         self.data = [];      
@@ -2287,8 +2299,8 @@ model("history", {
  * Copyright (c) 2013 Arron
  * Released under the MIT, BSD, and GPL Licenses.
  *
- * Date: Wed Jul 9 15:54:06 2014 +0800
- * Commit: e4f868defefdbec63e265592b2a38d52c2e28332
+ * Date: Fri Jul 18 11:03:56 2014 +0800
+ * Commit: 0b20cb1bd0a889b343c46259a69f53f7d652dbc9
  */
 (function(window,document,undefined){
 
@@ -4231,7 +4243,14 @@ widget("history", {
 			markup.push(self._renderMsg(val));
 		}
 		//self.$.content.innerHTML += markup.join('');
-		self.$.content.appendChild( createElement( "<div>"+markup.join('')+"</div>" ) );
+		var el = createElement( "<div>"+markup.join('')+"</div>" );
+		var imgs = el.getElementsByTagName("img");
+		for (var i = 0, l = imgs.length; i < l; i++) {
+			addEvent(imgs[i], "load", function(){
+				self.trigger("update");
+			});
+		};
+		self.$.content.appendChild( el );
 		self.trigger("update");
 	},
 	notice: function( type, msg ) {

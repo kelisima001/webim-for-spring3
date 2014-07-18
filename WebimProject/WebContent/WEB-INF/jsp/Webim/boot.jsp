@@ -16,10 +16,10 @@
                 enable_room: ${enable_room},
                 enable_noti: ${enable_noti},
                 discussion: ${enable_discussion},
-                theme: 'base',
+                theme: '${theme}',
                 local: 'zh-CN',
-                opacity: 80,
-                show_unavailable: true,
+                opacity: '${opacity}',
+                show_unavailable: ${show_unavailable},
                 upload: false,
                 min: window.location.href.indexOf("webim_debug") != -1 ? "" : ".min"
             };

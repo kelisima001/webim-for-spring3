@@ -347,6 +347,7 @@ public class WebimController {
 		if (room == null) {
 			room = this.model.findRoom(id);
 		}
+        //TODO: write database
 		if (room != null) {
 			this.client(ticket).join(id);
 		}
@@ -389,9 +390,11 @@ public class WebimController {
 	@ResponseBody
 	public String leaveRoom(HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
+		WebimEndpoint endpoint = currentEndpoint();
 		String room = request.getParameter("id");
 		String ticket = request.getParameter("ticket");
-		WebimClient c = this.client(ticket);
+        this.model.leaveRoom(room, endpoint.getId());
+		WebimClient c = this.client(endpoint, ticket);
 		c.leave(room);
 		return SUCCESS;
 	}
