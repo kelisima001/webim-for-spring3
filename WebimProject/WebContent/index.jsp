@@ -1,6 +1,8 @@
 <html>
 <head>
-<title>Webim for Spring3</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>WebIM for Spring3</title>
 </head>
 <body>
 	<h1>Webim for SpringMVC3 Demo</h1>
