@@ -175,9 +175,13 @@ public class WebimController {
 						rtBuddies.add(e);
 				}
 			}
-			//data.remove("presences");
+            //need test
+            List<WebimHistory> offlineHistories = this.model.offlineHistories(uid, 100);
+            this.model.offlineHistoriesReaded(uid);
+			data.remove("presences");
 			data.put("buddies", rtBuddies.toArray());
 			data.put("rooms", rooms.toArray());
+            data.put("new_messages", offlineHistories.toArray());
 			data.put("server_time", System.currentTimeMillis()); // TODO: /
 			data.put("user", endpoint);
 		} catch (Exception e) {
@@ -226,7 +230,7 @@ public class WebimController {
 		WebimMessage msg = new WebimMessage(to, c.getEndpoint().getNick(),
 				body, style, System.currentTimeMillis()); // TODO: / 1000.0
 		msg.setType(type);
-		msg.setOffline(offline == "true" ? true : false);
+		msg.setOffline("true".equals(offline) ? true : false);
 		c.publish(msg);
 		if (body != null && !body.startsWith("webim-event:")) {
 			this.model.insertHistory(uid, msg);
