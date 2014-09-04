@@ -2299,8 +2299,8 @@ model("history", {
  * Copyright (c) 2013 Arron
  * Released under the MIT, BSD, and GPL Licenses.
  *
- * Date: Fri Jul 18 11:03:56 2014 +0800
- * Commit: 0b20cb1bd0a889b343c46259a69f53f7d652dbc9
+ * Date: Tue Sep 2 10:40:16 2014 +0800
+ * Commit: 7a4a48d393cabc892c637b7336860e00df786654
  */
 (function(window,document,undefined){
 
@@ -6625,7 +6625,7 @@ widget("chatbtn",
 			if(id && children(el).length == 0 && text && (elementId || className.test(el.className))){
 				anthors[id] ? anthors[id].push(el) :(anthors[id] = [el]);
 				list[id] = {id: id, name: text};
-				var icon = createElement('<i class="webim-chaticon"><em>');;
+				var icon = createElement('<i class="webim-chaticon"><em></em></i>');
 				el.appendChild( icon );
 				el.icon = icon;
 				el.title = i18n("offline");
