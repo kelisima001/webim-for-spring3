@@ -8,7 +8,7 @@
                 is_login: '${is_login}',
                 is_visitor: ${is_visitor},
                 user: '',
-                setting: '${setting}',
+                setting: ${setting},
                 menu: '',
                 enable_chatlink: ${enable_chatlink},
                 enable_shortcut: ${enable_shortcut},

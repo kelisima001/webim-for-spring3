@@ -23,6 +23,8 @@ package webim;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import webim.client.WebimEndpoint;
 import webim.client.WebimMember;
 import webim.client.WebimMenu;
@@ -41,10 +43,11 @@ public class WebimPlugin {
      * API: current user
      *
      * 返回当前的Webim端点(用户)
+	 * @param request 
 	 *
      * @return current user
      */
-	public WebimEndpoint endpoint() {
+	public WebimEndpoint endpoint(HttpServletRequest request) {
 		// TODO: 应替换该代码，返回集成系统的当前用户。
 		WebimEndpoint ep = new WebimEndpoint("1", "user1");
 		ep.setAvatar("https://1.gravatar.com/avatar/136e370cbf1cf500cbbf791e56dac614?d=https%3A%2F%2Fidenticons.github.com%2F577292a0aa8cb84aa3e6f06fee6f711c.png&s=70"); // �û�ͷ��
