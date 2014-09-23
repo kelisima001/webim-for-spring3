@@ -154,8 +154,8 @@ public class WebimController {
 		List<WebimEndpoint> buddies = this.plugin.buddies(uid);
 
 		// chatlink Ids
-		String chatlinkIds = request.getParameter("chatlink_ids");
-		buddies.addAll(this.plugin.buddiesByIds(uid, chatlinkIds.split(",")));
+		//String chatlinkIds = request.getParameter("chatlink_ids");
+		//buddies.addAll(this.plugin.buddiesByIds(uid, chatlinkIds.split(",")));
 
 		List<WebimRoom> rooms = this.plugin.rooms(uid);
 		rooms.addAll(this.model.rooms(uid));
