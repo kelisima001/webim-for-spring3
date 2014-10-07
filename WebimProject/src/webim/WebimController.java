@@ -313,9 +313,8 @@ public class WebimController {
 		List<WebimEndpoint> buddies = plugin.buddiesByIds(
 				endpoint.getId(), 
 				uids.toArray(new String[uids.size()]));
-		//read visitors from 'webim_visitors' table 
-		buddies.addAll(model.visitors(
-				vids.toArray(new String[vids.size()])));
+		//TODO: read visitors from 'webim_visitors' table 
+		//buddies.addAll(model.visitors(vids.toArray(new String[vids.size()])));
 		
 		List<String> buddyIds = buddyIds(buddies);
 		

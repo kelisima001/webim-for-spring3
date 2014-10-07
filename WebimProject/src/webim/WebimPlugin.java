@@ -97,7 +97,7 @@ public class WebimPlugin {
      * @return Buddy list
      *
      */	
-	List<WebimEndpoint> buddiesByIds(String uid, String[] ids) {
+	public List<WebimEndpoint> buddiesByIds(String uid, String[] ids) {
 		List<WebimEndpoint> buddies = new ArrayList<WebimEndpoint>();
 		WebimEndpoint e = new WebimEndpoint("1", "user1");
 		e.setAvatar("https://1.gravatar.com/avatar/136e370cbf1cf500cbbf791e56dac614?d=https%3A%2F%2Fidenticons.github.com%2F577292a0aa8cb84aa3e6f06fee6f711c.png&s=50");

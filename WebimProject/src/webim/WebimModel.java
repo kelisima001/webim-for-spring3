@@ -153,7 +153,7 @@ public class WebimModel {
 	 * @return 配置数据，JSON格式
 	 */
 	public String getSetting(String uid) {
-		return "";
+		return "{}";
 	}
 
 	/**
