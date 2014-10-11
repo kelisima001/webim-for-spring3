@@ -101,6 +101,9 @@ public class WebimPlugin {
 		e = new WebimEndpoint("2", "user2");
 		e.setAvatar("https://1.gravatar.com/avatar/136e370cbf1cf500cbbf791e56dac614?d=https%3A%2F%2Fidenticons.github.com%2F577292a0aa8cb84aa3e6f06fee6f711c.png&s=50");
 		buddies.add(e);
+		if( isRobotSupport() ) {
+			buddies.add(robot);
+		}
 		return buddies;
 	}
 
@@ -240,13 +243,33 @@ public class WebimPlugin {
 		//TODO: 调用敏感词接口
 		return true;
 	}
+	
+	/**
+	 * 是否支持Robot
+	 * 
+	 * @return true 支持机器人
+	 */
+	public boolean isRobotSupport() {
+		return config.getBoolean("robot");
+	}
 
+	/**
+	 * 是否发送给机器人的消息?
+	 * 
+	 * @param to 机器人id
+	 * @return
+	 */
 	public boolean isFromRobot(String to) {
 		return robot.getId().equals(to);
 	}
 
+	/**
+	 * 机器人
+	 * @return 机器人
+	 */
 	public WebimRobot getRobot() {
 		return robot;
 	}
 
 }
+

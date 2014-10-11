@@ -132,7 +132,7 @@ public class WebimController {
 		for (String key : keys) {
 			data.put(key, this.config.get(key));
 		}
-		System.out.println(request.getContextPath());
+//		System.out.println(request.getContextPath());
 		data.put("context_path", request.getContextPath());
 		data.put("is_login", "1");
 		data.put("is_visitor", this.isVid(endpoint.getId()));
@@ -142,7 +142,7 @@ public class WebimController {
 		return new ModelAndView("Webim/boot", data);
 	}
 
-	@RequestMapping(value = "/online")
+	@RequestMapping(value = "/online", method=RequestMethod.POST)
 	@ResponseBody
 	public Map<String, Object> online(HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
@@ -217,7 +217,7 @@ public class WebimController {
 		return data;
 	}
 
-	@RequestMapping(value = "/offline")
+	@RequestMapping(value = "/offline", method=RequestMethod.POST)
 	@ResponseBody
 	public String offline(HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
@@ -227,7 +227,7 @@ public class WebimController {
 		return SUCCESS;
 	}
 
-	@RequestMapping("/refresh")
+	@RequestMapping(value="/refresh", method=RequestMethod.POST)
 	@ResponseBody
 	public String refresh(HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
@@ -237,7 +237,7 @@ public class WebimController {
 		return SUCCESS;
 	}
 
-	@RequestMapping(value = "/message") //, method = RequestMethod.POST
+	@RequestMapping(value = "/message", method = RequestMethod.POST)
 	@ResponseBody
 	public Map<String, String> message(HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
@@ -288,7 +288,7 @@ public class WebimController {
 		return rtData;
 	}
 
-	@RequestMapping(value = "/presence") //, method = RequestMethod.POST
+	@RequestMapping(value = "/presence", method = RequestMethod.POST)
 	@ResponseBody
 	public String presence(HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
@@ -302,7 +302,7 @@ public class WebimController {
 		return SUCCESS;
 	}
 
-	@RequestMapping(value = "/status") // , method = RequestMethod.POST
+	@RequestMapping(value = "/status", method = RequestMethod.POST) 
 	@ResponseBody
 	public String status(HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
@@ -400,7 +400,7 @@ public class WebimController {
 				histories);
 	}
 
-	@RequestMapping(value = "/room/invite") // , method = RequestMethod.POST
+	@RequestMapping(value = "/room/invite", method = RequestMethod.POST)
 	@ResponseBody
 	public WebimRoom inviteRoom(HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
@@ -430,7 +430,7 @@ public class WebimController {
 		return room;
 	}
 
-	@RequestMapping(value = "/room/join") // , method = RequestMethod.POST
+	@RequestMapping(value = "/room/join", method = RequestMethod.POST)
 	@ResponseBody
 	public WebimRoom joinRoom(HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
@@ -481,7 +481,7 @@ public class WebimController {
 		return members;
 	}
 
-	@RequestMapping(value = "/room/leave") // , method = RequestMethod.POST
+	@RequestMapping(value = "/room/leave" , method = RequestMethod.POST)
 	@ResponseBody
 	public String leaveRoom(HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
@@ -494,7 +494,7 @@ public class WebimController {
 		return SUCCESS;
 	}
 
-	@RequestMapping(value = "/room/block") // , method = RequestMethod.POST
+	@RequestMapping(value = "/room/block" , method = RequestMethod.POST) 
 	@ResponseBody
 	public String blockRoom(HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
@@ -504,7 +504,7 @@ public class WebimController {
 		return SUCCESS;
 	}
 
-	@RequestMapping(value = "/room/unblock") // , method = RequestMethod.POST
+	@RequestMapping(value = "/room/unblock" , method = RequestMethod.POST)
 	@ResponseBody
 	public String unblockRoom(HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
@@ -522,7 +522,7 @@ public class WebimController {
 		return SUCCESS;
 	}
 
-	@RequestMapping(value = "/setting") // , method = RequestMethod.POST
+	@RequestMapping(value = "/setting" , method = RequestMethod.POST)
 	@ResponseBody
 	public String setting(HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
