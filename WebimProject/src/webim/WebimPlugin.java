@@ -23,21 +23,36 @@ package webim;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
-import webim.client.WebimEndpoint;
-import webim.client.WebimMember;
-import webim.client.WebimMenu;
-import webim.client.WebimNotification;
-import webim.client.WebimRoom;
+import org.springframework.stereotype.Service;
+
+import webim.model.WebimEndpoint;
+import webim.model.WebimMember;
+import webim.model.WebimMenu;
+import webim.model.WebimNotification;
+import webim.model.WebimRobot;
+import webim.model.WebimRoom;
 
 /**
  * WebIM插件接口 
  * 
  * @author Ery Lee <ery.lee at gmail.com>
+ * 
  * @since 5.4
  */
+@Service("webimPlugin")
 public class WebimPlugin {
+
+    private WebimRobot robot;
+    
+	@Resource(name="webimConfig")
+	private WebimConfig config;
+
+    public WebimPlugin() {
+    	robot = new WebimRobot("robot", "Webim机器人");
+    }
 
 	/**
      * API: current user
@@ -47,7 +62,7 @@ public class WebimPlugin {
 	 *
      * @return current user
      */
-	public WebimEndpoint endpoint(HttpServletRequest request) {
+	public WebimEndpoint endpoint(HttpServletRequest request) throws Exception{
 		// TODO: 应替换该代码，返回集成系统的当前用户。
 		WebimEndpoint ep = new WebimEndpoint("1", "user1");
 		ep.setAvatar("https://1.gravatar.com/avatar/136e370cbf1cf500cbbf791e56dac614?d=https%3A%2F%2Fidenticons.github.com%2F577292a0aa8cb84aa3e6f06fee6f711c.png&s=70"); // �û�ͷ��
@@ -97,7 +112,7 @@ public class WebimPlugin {
      * @return Buddy list
      *
      */	
-	List<WebimEndpoint> buddiesByIds(String uid, String[] ids) {
+	public List<WebimEndpoint> buddiesByIds(String uid, String[] ids) {
 		List<WebimEndpoint> buddies = new ArrayList<WebimEndpoint>();
 		WebimEndpoint e = new WebimEndpoint("1", "user1");
 		e.setAvatar("https://1.gravatar.com/avatar/136e370cbf1cf500cbbf791e56dac614?d=https%3A%2F%2Fidenticons.github.com%2F577292a0aa8cb84aa3e6f06fee6f711c.png&s=50");
@@ -143,7 +158,7 @@ public class WebimPlugin {
      *  all_count:  count of all members
      *  blocked:    true | false
      */
-	public List<WebimRoom> rooms(String uid) {
+	public List<WebimRoom> rooms(String uid) throws Exception {
 		// TODO: 示例代码，需要替换
 		List<WebimRoom> rooms = new ArrayList<WebimRoom>();
 		WebimRoom room = new WebimRoom("room1", "Room1");
@@ -162,7 +177,7 @@ public class WebimPlugin {
      * Room
      *
      */
-    public List<WebimRoom> roomsByIds(String uid, String[] ids) {
+    public List<WebimRoom> roomsByIds(String uid, String[] ids) throws Exception {
 		// TODO: 示例代码，需要替换
 		List<WebimRoom> rooms = new ArrayList<WebimRoom>();
 		WebimRoom room = new WebimRoom("room1", "Room1");
@@ -177,7 +192,7 @@ public class WebimPlugin {
      * @param roomId
      * @return member list
      */    
-    public List<WebimMember> members(String roomId) {
+    public List<WebimMember> members(String roomId) throws Exception{
     	List<WebimMember> members = new ArrayList<WebimMember>();
     	members.add(new WebimMember("1", "user1"));
     	members.add(new WebimMember("2", "user2"));
@@ -194,7 +209,7 @@ public class WebimPlugin {
      *  text: text
      *  link: link
      */    
-    public List<WebimNotification> notifications(String uid) {
+    public List<WebimNotification> notifications(String uid) throws Exception {
     	List<WebimNotification> notifications = new ArrayList<WebimNotification>();
     	notifications.add(new WebimNotification("通知", "#"));
     	return notifications;
@@ -212,8 +227,26 @@ public class WebimPlugin {
      * text
      * link
      */
-    public List<WebimMenu> menu(String uid) {
+    public List<WebimMenu> menu(String uid) throws Exception {
     	return new ArrayList<WebimMenu>();
     }
-    
+
+    /**
+     * 敏感词处理
+     * @param body
+     * @return
+     */
+	public boolean checkCensor(String body) {
+		//TODO: 调用敏感词接口
+		return true;
+	}
+
+	public boolean isFromRobot(String to) {
+		return robot.getId().equals(to);
+	}
+
+	public WebimRobot getRobot() {
+		return robot;
+	}
+
 }

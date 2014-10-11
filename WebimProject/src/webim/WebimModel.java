@@ -23,48 +23,46 @@ package webim;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
-import webim.client.WebimEndpoint;
-import webim.client.WebimHistory;
-import webim.client.WebimMember;
-import webim.client.WebimMessage;
-import webim.client.WebimRoom;
+import org.springframework.stereotype.Service;
+
+import webim.dao.WebimHistoryDao;
+import webim.dao.WebimRoomDao;
+import webim.dao.WebimSettingDao;
+import webim.dao.WebimVisitorDao;
+import webim.model.WebimEndpoint;
+import webim.model.WebimHistory;
+import webim.model.WebimMember;
+import webim.model.WebimMessage;
+import webim.model.WebimRoom;
 
 
 /**
  * WebIM数据库接口
  * 
- * @author Ery Lee <ery.lee at gmail.com>
+ * @author Feng Lee <feng.lee at nextalk.im>
  * 
  * @since 5.4
  */
-
+@Service("webimModel")
 public class WebimModel {
 	
+	@Resource(name="webimHistoryDao")
+	private WebimHistoryDao historyDao;
+	
+	@Resource(name="webimSettingDao")
+	private WebimSettingDao settingDao;
+
+	@Resource(name="webimRoomDao")
+	private WebimRoomDao roomDao;
+	
+	@Resource(name="webimVisitorDao")
+	private WebimVisitorDao visitorDao;
 
 	/**
-	 * 读取与with用户聊天记录，查询逻辑:<br>
-	 * 
-	 * <pre>
-	 *     if (type == "chat")
-	 *       {
-	 *           
-	 *           "SELECT * FROM webim_Histories WHERE `type` = 'chat' 
-	 *           AND ((`to`=%s AND `from`=%s AND `fromdel` != 1) 
-	 *           OR (`send` = 1 AND `from`=%s AND `to`=%s AND `todel` != 1))  
-	 *           ORDER BY timestamp DESC LIMIT %d", $with, $uid, $with, $uid, $limit );
-	 *           
-	 *       }
-	 *       else
-	 *       {
-	 *           
-	 *           "SELECT * FROM  webim_histories 
-	 *               WHERE `to`=%s AND `type`='grpchat' AND send = 1 
-	 *               ORDER BY timestamp DESC LIMIT %d", , $with, $limit);
-	 *           
-	 *       }
-	 * </pre>
+	 * 读取与with用户聊天记录.
 	 * 
 	 * @param uid
 	 *            当前用户id
@@ -78,26 +76,37 @@ public class WebimModel {
 	 * @return 聊天记录
 	 */
 	public List<WebimHistory> histories(String uid, String with, String type, int limit) {
-		return new ArrayList<WebimHistory>();
+        return historyDao.getHistories(uid, with, type, limit);
+		
 	}
 
 	/**
-	 * 读取用户的离线消息，SQL脚本:<br>
+	 * 读取用户的离线消息。
 	 * 
-	 * "SELECT * FROM  webim_histories WHERE `to` = ? and send != 1 ORDER BY timestamp DESC LIMIT %d"
-	 * , limit;
-	 * 
-	 * @param uid
-	 *            用户uid
+	 * @param uid 用户uid
 	 * @return 返回离线消息
 	 */
 	public List<WebimHistory> offlineHistories(String uid, int limit) {
-		//TODO:
-		return new ArrayList<WebimHistory>();
+        return historyDao.getOfflineHistories(uid, limit);
 	}
 	
+	/**
+	 * 插入一条聊天历史纪录
+	 * 
+	 * @param uid 用户id
+	 * @param msg 消息
+	 */
 	public void insertHistory(String uid, WebimMessage msg) {
-		// TODO Auto-generated method stub
+		WebimHistory history = new WebimHistory();
+		history.setFrom(uid);
+		history.setTo(msg.getTo());		
+		history.setType(msg.getType());
+		history.setNick(msg.getNick());
+		history.setBody(msg.getBody());
+		history.setStyle(msg.getStyle());
+		history.setSend(msg.isOffline() ? 0 : 1); 
+		history.setTimestamp(msg.getTimestamp());
+		insertHistory(history);
 	}
 	
 	/**
@@ -107,17 +116,11 @@ public class WebimModel {
 	 *            聊天记录
 	 */
 	public void insertHistory(WebimHistory history) {
-		//TODO:
+		historyDao.insertHistory(history);
 	}
 	
 	/**
-	 * 清除与with用户聊天记录，SQL脚本:<br>
-	 * 
-	 * "UPDATE webim_histories SET fromdel = 1 Where from = @0 and to = @1 and type = 'chat'"
-	 * <br>
-	 * "UPDATE webim_histories SET todel = 1 Where to = @0 and from = @1 and type = 'chat'"
-	 * <br>
-	 * "DELETE FROM webim_histories WHERE fromdel = 1 AND todel = 1"
+	 * 清除与with用户聊天记录
 	 * 
 	 * @param uid
 	 *            用户uid
@@ -125,45 +128,32 @@ public class WebimModel {
 	 *            对方id,可根据需要转换为long
 	 */
 	public void clearHistories(String uid, String with) {
-		//TODO: clear histories
+		historyDao.clearHistories(uid, with);
 	}
 
 	/**
-	 * 离线消息转换为历史消息，SQL脚本:<br>
-	 * 
-	 * "UPDATE webim_histories SET send = 1 where to = ? and send = 0");
+	 * 离线消息转换为历史消息
 	 * 
 	 * @param uid
 	 *            用户uid
 	 */
 	public void offlineHistoriesReaded(String uid) {
-		//TODO:
+		historyDao.offlineHistoriesReaded(uid);
 	}
 
 	/**
-	 * 读取用户配置数据。<br>
-	 * 
-	 * <ol>
-	 * <li>数据库查询SQL脚本："select data from webim_settings where uid = ?", uid</li>
-	 * <li>如果data为空，返回: "{}"</li>
-	 * </ol>
+	 * 读取用户配置数据
 	 * 
 	 * @param uid
 	 *            用户uid
 	 * @return 配置数据，JSON格式
 	 */
 	public String getSetting(String uid) {
-		return "";
+		return settingDao.get(uid);
 	}
 
 	/**
-	 * 设置用户配置数据。<br>
-	 * 
-	 * <ol>
-	 * <li>数据库SQL脚本: "update webim_settings set data =@0  where uid = @1", uid,
-	 * data</li>
-	 * <li>应该先读取配置检查是否存在，如不存在插入，存在更新。</li>
-	 * </ol>
+	 * 设置用户配置数据。
 	 * 
 	 * @param uid
 	 *            用户uid
@@ -171,7 +161,7 @@ public class WebimModel {
 	 *            配置数据，JSON格式
 	 */
 	public void saveSetting(String uid, String data) {
-		//TODO: DEMO CODE
+		settingDao.set(uid, data);
 	}
 	
 	/**
@@ -181,19 +171,18 @@ public class WebimModel {
 	 * @return 临时讨论组
 	 */
 	public WebimRoom findRoom(String roomId) {
-		return null;
+		return roomDao.getRoom(roomId);
 	}
 
 	/**
 	 * 读取当前用户的临时讨论组
 	 * 
-	 * @param uid
+	 * @param uid 用户id
 	 * 
 	 * @return 群组列表
 	 */
 	public List<WebimRoom> rooms(String uid) {
-		//TODO:
-		return new ArrayList<WebimRoom>();
+		return roomDao.getRoomsOfUser(uid);
 	}
 	
 	/**
@@ -205,8 +194,7 @@ public class WebimModel {
 	 * @return 群组列表
 	 */
 	public List<WebimRoom> roomsByIds(String uid, String[] ids) {
-		//TODO:
-		return new ArrayList<WebimRoom>();
+		return roomDao.getRoomsByIds(uid, ids);
 	}
 
 	/**
@@ -215,8 +203,8 @@ public class WebimModel {
 	 * @param room 临时讨论组ID
 	 * @return 成员列表
 	 */
-	public List<WebimMember> members(String room) {
-		return new ArrayList<WebimMember>();
+	public List<WebimMember> members(String roomId) {
+		return roomDao.getMembersOfRoom(roomId);
 	}
 	
 	/**
@@ -227,8 +215,10 @@ public class WebimModel {
 	 * @param nick
 	 */
 	public WebimRoom createRoom(String owner, String name, String nick) {
-		//TODO: insert into webim_rooms table
-		return new WebimRoom(name, nick);
+		WebimRoom room = new WebimRoom(name, nick);
+		room.setOwner(owner);
+		roomDao.insertRoom(room);
+		return room;
 	}
 	
 	/**
@@ -238,6 +228,7 @@ public class WebimModel {
 	 * @param members 成员列表
 	 */
 	public void inviteRoom(String roomId, List<WebimEndpoint> members) {
+		roomDao.inviteMembersToRoom(roomId, members);
 		//TODO: invite members to room
 	}
 	
@@ -248,18 +239,18 @@ public class WebimModel {
 	 * @param uid
 	 * @param nick
 	 */
-	public void joinRoom(String room, String uid, String nick) {
-		//TODO: 
+	public void joinRoom(String roomId, String uid, String nick) {
+		roomDao.joinRoom(roomId, new WebimMember(uid, nick));
 	}
 	
 	/**
 	 * 离开讨论组
 	 * 
-	 * @param room
+	 * @param roomId
 	 * @param uid
 	 */
-	public void leaveRoom(String room, String uid) {
-		//TODO: 
+	public void leaveRoom(String roomId, String uid) {
+		roomDao.leaveRoom(roomId, uid);
 	}
 	
 	/**
@@ -268,18 +259,18 @@ public class WebimModel {
 	 * @param room
 	 * @param uid
 	 */
-	public void blockRoom(String room, String uid) {
-		//TODO:
+	public void blockRoom(String roomId, String uid) {
+		roomDao.blockRoom(roomId, uid);
 	}
 	
 	/**
 	 * 解除屏蔽
 	 * 
-	 * @param room
+	 * @param roomId
 	 * @param uid
 	 */
-	public void unblockRoom(String room, String uid) {
-		//TODO:
+	public void unblockRoom(String roomId, String uid) {
+		roomDao.unblockRoom(roomId, uid);
 	}
 	
 	/**
@@ -290,9 +281,8 @@ public class WebimModel {
 	 * 
 	 * @return is blocked
 	 */
-	public boolean isRoomBlocked(String room, String uid) {
-		//TODO:
-		return false;
+	public boolean isRoomBlocked(String roomId, String uid) {
+		return roomDao.isRoomBlocked(roomId, uid);
 	}
 
 	/**
@@ -351,7 +341,7 @@ public class WebimModel {
 	 * @param vids
 	 * @return
 	 */
-	List<WebimEndpoint> visitors(String[] vids) {
+	public List<WebimEndpoint> visitors(String[] vids) {
 		/*
 		List<WebimEndpoint> rtList = new ArrayList<WebimEndpoint>();
 		if(vids.length == 0) return rtList;

@@ -1,6 +1,7 @@
+<%@ page contentType="text/html;charset=utf-8" %>  
 <html>
 <head>
-    <meta charset="utf-8">
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>WebIM for Spring3</title>
 </head>
@@ -17,6 +18,6 @@
 		<li><a class="webim-chatbtn" href="/chat/8">Chat with User8</a></li>
 		<li><a class="webim-chatbtn" href="/chat/9">Chat with User9</a></li>
 	</ul>
-	<script type="text/javascript" src="/WebimProject/Webim/boot.html"></script>
+	<script type="text/javascript" src="/WebimProject/Webim/boot.do"></script>
 </body>
 </html>

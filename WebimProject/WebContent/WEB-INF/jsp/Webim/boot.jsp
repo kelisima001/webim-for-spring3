@@ -18,6 +18,7 @@
                 discussion: ${enable_discussion},
                 theme: '${theme}',
                 local: 'zh-CN',
+                jsonp: ${jsonp},
                 opacity: '${opacity}',
                 show_unavailable: ${show_unavailable},
                 upload: false,
