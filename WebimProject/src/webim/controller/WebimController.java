@@ -261,14 +261,14 @@ public class WebimController {
 		String offline = request.getParameter("offline");
 		String to = request.getParameter("to");
 		String body = request.getParameter("body");
+		String style = request.getParameter("style");
+		if (style == null)
+			style = "";
 		if(!plugin.checkCensor(body)) {
 			rtData.put("status", "error");
 			rtData.put("message", "您发送消息有敏感词");
 			return rtData;
 		}
-		String style = request.getParameter("style");
-		if (style == null)
-			style = "";
 		if(plugin.isRobotSupport() && plugin.isFromRobot(to)) {
 			WebimClient c = this.client(endpoint, request, null);
 			
