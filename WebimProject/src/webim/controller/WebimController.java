@@ -183,7 +183,8 @@ public class WebimController {
 			for (WebimEndpoint e : buddies) {
 				buddyMap.put(e.getId(), e);
 			}
-
+			
+			@SuppressWarnings("unchecked")
 			Map<String, String> presences = (Map<String, String>) data
 					.get("presences");
 			Iterator<String> it = presences.keySet().iterator();
@@ -375,7 +376,7 @@ public class WebimController {
 		String with = request.getParameter("id");
 		String type = request.getParameter("type");
 		if(plugin.isRobotSupport() && with.equals(plugin.getRobot().getId())) {
-			String[] askList = plugin.getRobot().getAskList();
+			//String[] askList = plugin.getRobot().getAskList();
 			//TODO: 如果没有历史消息,返回问题列表
 			//如果有历史消息,问题放到最后
 		}
