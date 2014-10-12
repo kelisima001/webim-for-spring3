@@ -18,10 +18,12 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package webim;
+package webim.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -37,6 +39,7 @@ import webim.model.WebimHistory;
 import webim.model.WebimMember;
 import webim.model.WebimMessage;
 import webim.model.WebimRoom;
+import webim.model.WebimVisitor;
 
 
 /**
@@ -285,55 +288,6 @@ public class WebimModel {
 		return roomDao.isRoomBlocked(roomId, uid);
 	}
 
-	/**
-	 * 查找或创建访客
-	 * 
-	 * @param request
-	 * 
-	 * @return
-	 */
-	public WebimEndpoint findOrCreateVisitor(HttpServletRequest request) {
-		//find or create visitor;
-		// TODO Auto-generated method stub
-		return null;
-		/*
-        global $_COOKIE, $_SERVER;
-        if (isset($_COOKIE['_webim_visitor_id'])) {
-            $id = $_COOKIE['_webim_visitor_id'];
-        } else {
-            $id = substr(uniqid(), 6);
-            setcookie('_webim_visitor_id', $id, time() + 3600 * 24 * 30, "/", "");
-        }
-        $vid = 'vid:'. $id;
-        $visitor = $this->where('name', $vid)->find();
-        if( !$visitor ) {
-            $ipaddr = isset($_SERVER['X-Forwarded-For']) ? $_SERVER['X-Forwarded-For'] : $_SERVER["REMOTE_ADDR"];
-            $loc = IP::find($ipaddr);
-            if(is_array($loc)) $loc = implode('',  $loc);
-            $referer = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '';
-            $this->create(array(
-                "name" => $vid,
-                "ipaddr" => $ipaddr,
-                "url" => $_SERVER['REQUEST_URI'],
-                "referer" => $referer,
-                "location" => $loc,
-            ));
-            $this->created = date( 'Y-m-d H:i:s' );
-            $this->add();
-        }
-        return (object) array(
-            'id' => $vid,
-            'nick' => "v".$id,
-            'group' => "visitor",
-            'presence' => 'online',
-            'show' => "available",
-            'avatar' => WEBIM_IMAGE('male.png'),
-            'role' => 'visitor',
-            'url' => "#",
-            'status' => "",
-        );
-        */
-	}
 		
 	/**
 	 * 根据id列表读取访客列表
@@ -341,35 +295,38 @@ public class WebimModel {
 	 * @param vids
 	 * @return
 	 */
-	public List<WebimEndpoint> visitors(String[] vids) {
-		/*
-		List<WebimEndpoint> rtList = new ArrayList<WebimEndpoint>();
-		if(vids.length == 0) return rtList;
-		
-		List<WebimVisitor> visitors = new ArrayList<WebimVisitor>();
-		long[] ids = new long[vids.length];
+	public List<WebimVisitor> visitors(String[] vids) {
+		if(vids.length == 0) return new ArrayList<WebimVisitor>();
+		String[] ids = new String[vids.length];
 		for(int i = 0; i < vids.length; i++) {
-			ids[i] = Long.parseLong(vids[i].substring("vid:".length()));
+			ids[i] = vids[i].substring("vid:".length());
 		}
+		return visitorDao.findAll(vids);
+	}
 
-		//select * from webim_visitors where name in (ids);
-		
-		//map visitor to endpoint
-		for(WebimVisitor v : visitors) {
-			String vid = "vid:" + v.id;
-			String nick = v.name;
-			WebimEndpoint ep = new WebimEndpoint(vid, nick);
-			String status = "";
-			if(v.location != null) status += v.location;
-			if(v.ipaddr != null) status += "(" + v.ipaddr + ")"; 
-			ep.setGroup("visitor");
-			ep.setAvatar("");//TODO:
-			ep.setStatus(status);
-			rtList.add(ep);
-		}
-		return rtList;
-		*/
-		return new ArrayList<WebimEndpoint>();
+	/**
+	 * 根据vid查找一个访客，vid对应数据库name字段
+	 * 
+	 * @param vid
+	 * @return
+	 */
+	public WebimVisitor findVisitor(String vid) {
+		return visitorDao.find(vid);
+	}
+	
+
+	/**
+	 * 创建一个访客对象
+	 * @param vid
+	 * @param request
+	 * @return
+	 */
+	public WebimVisitor createVisitor(String vid, HttpServletRequest request) {
+		Map<String, String> data = new HashMap<String, String>();
+		data.put("name", vid);
+		data.put("ipaddr", request.getRemoteAddr());
+		data.put("referer", request.getHeader("referrer"));
+	    return visitorDao.insert(data);
 	}
 	
 }

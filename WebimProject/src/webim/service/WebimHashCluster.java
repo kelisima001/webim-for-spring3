@@ -18,12 +18,13 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package webim;
+package webim.service;
 
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
 
+import webim.WebimConfig;
 import webim.client.WebimCluster;
 import webim.model.WebimEndpoint;
 
@@ -50,7 +51,7 @@ public class WebimHashCluster implements WebimCluster {
 		if(servers == null) {
 			servers = ((String)config.get("server")).split(",");
 		}
-		int idx = hash % servers.length;
+		int idx = (hash & 0x7FFFFFFF) % servers.length;
 		return servers[idx];
 	}
 

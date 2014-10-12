@@ -70,6 +70,7 @@ DROP TABLE IF EXISTS webim_visitors;
 CREATE TABLE webim_visitors (
       `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
       `name` varchar(60) DEFAULT NULL,
+      `nick` varchar(60) DEFAULT NULL,
       `ipaddr` varchar(60) DEFAULT NULL,
       `url` varchar(100) DEFAULT NULL,
       `referer` varchar(100) DEFAULT NULL,

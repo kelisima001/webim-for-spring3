@@ -18,7 +18,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package webim;
+package webim.service;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +28,8 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.stereotype.Service;
 
+import webim.WebimConfig;
+import webim.model.WebimAskProvider;
 import webim.model.WebimEndpoint;
 import webim.model.WebimMember;
 import webim.model.WebimMenu;
@@ -38,7 +40,7 @@ import webim.model.WebimRoom;
 /**
  * WebIM插件接口 
  * 
- * @author Ery Lee <ery.lee at gmail.com>
+ * @author Feng Lee <feng.lee at nextalk.im>
  * 
  * @since 5.4
  */
@@ -51,7 +53,35 @@ public class WebimPlugin {
 	private WebimConfig config;
 
     public WebimPlugin() {
+    	
+    	WebimAskProvider provider = new WebimAskProvider() {
+			@Override
+			public String answer(String ask) {
+				ask = ask.trim();
+				if("1".equals(ask)) {
+					return "http://nextalk.im";
+				}
+				if("2".equals(ask)) {
+					return "https://github.com/webim/webim-for-spring3";
+				}
+				return "问题列表:\n " + String.join("\n", this.askList());
+			}
+
+			@Override
+			public String[] askList() {
+				return new String[] {
+						"1. NexTalk产品介绍",
+						"2. Webim-for-spring3插件源码下载"
+				};
+			}
+		};
+			
     	robot = new WebimRobot("robot", "Webim机器人");
+    	
+    	robot.setAvatar("static/images/male.png");
+    	
+    	robot.setProvider(provider);
+    	
     }
 
 	/**

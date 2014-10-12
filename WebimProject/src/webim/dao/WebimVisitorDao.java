@@ -20,7 +20,13 @@
  */
 package webim.dao;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.stereotype.Repository;
+
+import webim.model.WebimVisitor;
 
 /**
  * Webim访客数据访问对象
@@ -30,5 +36,33 @@ import org.springframework.stereotype.Repository;
  */
 @Repository("webimVisitorDao")
 public class WebimVisitorDao {
+
+	public WebimVisitor find(String vid) {
+		//TODO: 
+		WebimVisitor v = new WebimVisitor(vid, "V"+vid);
+		v.setAvatar("static/images/male.png");
+		return v;
+	}
+
+	public WebimVisitor insert(Map<String, String> data) {
+		// TODO Auto-generated method stub
+		String vid = data.get("name");
+		WebimVisitor v = new WebimVisitor(data.get("name"), "V"+vid);
+		v.setIpaddr(data.get("ipaddr"));
+		v.setReferer(data.get("referer"));
+		v.setGroup("visitor");
+		v.setAvatar("static/images/male.png");
+		return v;
+	}
+
+	public List<WebimVisitor> findAll(String[] vids) {
+		List<WebimVisitor> list = new ArrayList<WebimVisitor>();
+		for(int i = 0; i < vids.length; i++) {
+			WebimVisitor v = new WebimVisitor(vids[i], "V"+vids[i]);
+			v.setAvatar("static/images/male.png");
+			list.add(v);
+		}
+		return list;
+	}
 
 }
