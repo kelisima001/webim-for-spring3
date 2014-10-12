@@ -76,7 +76,7 @@ public class WebimPlugin {
 			}
 		};
 			
-    	robot = new WebimRobot("robot", "Webim机器人");
+    	robot = new WebimRobot("robot", "Robot");
     	
     	robot.setAvatar("static/images/male.png");
     	
