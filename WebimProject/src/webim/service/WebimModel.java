@@ -30,6 +30,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.stereotype.Service;
 
+import webim.dao.WebimBuddyDao;
 import webim.dao.WebimHistoryDao;
 import webim.dao.WebimRoomDao;
 import webim.dao.WebimSettingDao;
@@ -64,6 +65,9 @@ public class WebimModel {
 	@Resource(name="webimVisitorDao")
 	private WebimVisitorDao visitorDao;
 
+	@Resource(name="webimBuddyDao")
+	private WebimBuddyDao buddyDao;
+	
 	/**
 	 * 读取与with用户聊天记录.
 	 * 
@@ -327,6 +331,14 @@ public class WebimModel {
 		data.put("ipaddr", request.getRemoteAddr());
 		data.put("referer", request.getHeader("referrer"));
 	    return visitorDao.insert(data);
+	}
+
+	public boolean isBuddy(String uid, String with) {
+		return buddyDao.isBuddy(uid, with);
+	}
+
+	public void addBuddy(String uid, String with) {
+		buddyDao.addBuddy(uid, with);
 	}
 	
 }

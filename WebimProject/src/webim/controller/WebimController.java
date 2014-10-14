@@ -133,10 +133,21 @@ public class WebimController {
 		WebimEndpoint endpoint = currentEndpoint(request,response);
 		response.setHeader("Cache-Control", "no-cache");
 		Map<String, Object> data = new HashMap<String, Object>();
-		String[] keys = new String[] { "version", "theme", "local", "emot",
-				"opacity", "enable_room", "enable_discussion",
-				"enable_chatlink", "enable_shortcut", "enable_noti",
-				"enable_menu", "show_unavailable", "upload" };
+		String[] keys = new String[] { 
+				"version", 
+				"theme", 
+				"local", 
+				"emot",
+				"opacity", 
+				"enable_room", 
+				"enable_discussion",
+				"enable_chatlink", 
+				"enable_shortcut", 
+				"enable_noti",
+				"enable_menu", 
+				"show_unavailable", 
+				"upload"
+		};
 		for (String key : keys) {
 			data.put(key, this.config.get(key));
 		}
@@ -164,9 +175,20 @@ public class WebimController {
 		Map<String, Object> data = new HashMap<String, Object>();
 		List<WebimEndpoint> buddies = this.plugin.buddies(uid);
 
-		//TODO: chatlink Ids
+		//pending buddies ids that need to read buddy
+		Set<String> pendingIds = new HashSet<String>();
 		String chatlinkIds = request.getParameter("chatlink_ids");
-		buddies.addAll(this.plugin.buddiesByIds(uid, chatlinkIds.split(",")));
+		if(chatlinkIds != null) {
+			for(String id : chatlinkIds.split(",")) { pendingIds.add(id); };
+		}
+		List<WebimHistory> offlineHistories = this.model.offlineHistories(
+		uid, 100);
+		for(WebimHistory h : offlineHistories) { pendingIds.add(h.getFrom()); }
+		pendingIds.removeAll(buddyIds(buddies));
+		
+		if(pendingIds.size() > 0) {
+			buddies.addAll(this.plugin.buddiesByIds(uid, pendingIds.toArray(new String[pendingIds.size()])));
+		}
 
 		List<WebimRoom> rooms = this.plugin.rooms(uid);
 		rooms.addAll(this.model.rooms(uid));
@@ -209,8 +231,6 @@ public class WebimController {
 				}
 			}
 			// need test
-			List<WebimHistory> offlineHistories = this.model.offlineHistories(
-					uid, 100);
 			this.model.offlineHistoriesReaded(uid);
 			data.remove("presences");
 			data.put("buddies", rtBuddies.toArray());
@@ -264,6 +284,11 @@ public class WebimController {
 		String style = request.getParameter("style");
 		if (style == null)
 			style = "";
+		
+		if(!this.model.isBuddy(uid, to)) {
+			this.model.addBuddy(uid, to);
+		} 
+		
 		if(!plugin.checkCensor(body)) {
 			rtData.put("status", "error");
 			rtData.put("message", "您发送消息有敏感词");

@@ -64,7 +64,11 @@ public class WebimPlugin {
 				if("2".equals(ask)) {
 					return "https://github.com/webim/webim-for-spring3";
 				}
-				return "问题列表:\n " + String.join("\n", this.askList());
+				StringBuffer sb = new StringBuffer("问题列表:\n");
+				for(String s : this.askList()) {
+					sb.append(s + "\n");
+				}
+				return sb.toString();
 			}
 
 			@Override
