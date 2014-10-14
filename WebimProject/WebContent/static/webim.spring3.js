@@ -18,7 +18,7 @@
 		setting : path + "Webim/setting" + suffix,
 		history : path + "Webim/history" + suffix,
 		clear : path + "Webim/history/clear" + suffix,
-		download : path + "Webim/history/download.html",
+		download : path + "Webim/history/download" + suffix,
 		// room actions
 		invite : path + "Webim/room/invite" + suffix,
 		join : path + "Webim/room/join" + suffix,
@@ -29,7 +29,7 @@
 		// notifications
 		notifications : path + "Webim/notifications" + suffix,
 		// upload files
-		upload : path + "Webim/upload.html"
+		upload : path + "Webim/upload" + suffix
 	});
 
 	webim.ui.emot.init({

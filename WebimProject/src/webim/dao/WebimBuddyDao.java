@@ -39,7 +39,7 @@ import org.springframework.stereotype.Repository;
  * 
  * @since 5.8
  */
-@Repository("webimRoomDao")
+@Repository("webimBuddyDao")
 public class WebimBuddyDao {
 
 	/**
