@@ -300,12 +300,11 @@ public class WebimController {
 			WebimMessage requestMsg = new WebimMessage(to, 
 					c.getEndpoint().getNick(), body, style, System.currentTimeMillis());
 			this.model.insertHistory(uid, requestMsg);
-			
 			String answer = plugin.getRobot().answer(body);
 			WebimMessage answermsg = new WebimMessage(uid, plugin.getRobot().getNick(),
 					answer, "", System.currentTimeMillis());
-			c.push(to, answermsg);
 			this.model.insertHistory(to, answermsg);
+			c.push(to, answermsg);
 		} else {
 			WebimClient c = this.client(endpoint, request, ticket);
 			
@@ -313,10 +312,10 @@ public class WebimController {
 				body, style, System.currentTimeMillis()); 
 			msg.setType(type);
 			msg.setOffline("true".equals(offline) ? true : false);
-			c.publish(msg);
 			if (body != null && !body.startsWith("webim-event:")) {
 				this.model.insertHistory(uid, msg);
 			}
+			c.publish(msg);
 		}
 		rtData.put("status", "ok");
 		return rtData;
