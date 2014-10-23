@@ -3,22 +3,17 @@
 
 ## 简介
 
-[Spring](http://spring.io)是Java最常用的站点或应用开发框架。
+[Spring](http://spring.io)是Java项目最常用的站点或应用开发框架。
 
-[WebIM for Spring3](https://github.com/webim/webim-for-spring3) 是 [NexTalk](http://nextalk.im) 为Spring框架提供的快速WebIM开发集成包。可为Spring框架开发的社区网站、电子商务、企业应用等提供立即可用的站内即时消息。
+WebIM for Spring3是[NexTalk](http://nextalk.im)为Spring框架提供的快速WebIM开发集成包。可为Spring框架开发的社区网站、电子商务、企业应用等提供立即可用的站内即时消息。
 
-WebIM for Spring3开发包，通过开放源码的接口与站点的用户体系、数据库无缝集成。
-
-TODO:
-
-WebIM的前端页面，集成后直接嵌入站点右下角。
+WebIM for Spring3开发包，通过开放源码以接口方式，与站点的用户体系、好友关系、数据库无缝集成。WebIM的前端界面，集成后直接嵌入站点右下角。并支持在站点页面的任意位置，添加聊天按钮:
 
 ![Spring3 Screenshot](http://nextalk.im/static/img/screenshots/spring3.png)
 
-
 ## NexTalk
 
-[ ***NexTalk*** ](http://nextalk.im/)是基于WEB标准协议设计的，简单专业开放源码的即时消息系统。可快速为社区微博、电子商务、企业应用集成即时消息服务。
+[NexTalk](http://nextalk.im/)是基于WEB标准协议设计的，简单专业开放源码的即时消息系统。可快速为社区微博、电子商务、企业应用集成即时消息服务。
 
 NexTalk架构上分解为：***WEB业务服务器*** + ***消息路由服务器*** 两个独立部分，遵循 ***Open Close***的架构设计原则。WebIM插件方式与第三方的站点或应用的用户体系开放集成，独立的消息服务器负责稳定的连接管理、消息路由和消息推送。
 
@@ -64,6 +59,8 @@ iOS手机客户端SDK | 6.0
 
 ### 运行演示
 
+Webim for Spring3开发包，自带WebimProject的演示项目，导入Eclipse即可运行。
+
 1. 导入'WebimProject'项目到[Eclipse EE](http://eclipse.org/downloads/packages/eclipse-ide-java-ee-developers/lunasr1)
 
 2. Eclipse中创建Tomcat Server，启动项目: 'Run as' -> 'Run on Server' 
@@ -86,7 +83,7 @@ WebimProject/
 
 注: 默认'webim'包的名称，可根据项目包命名规则重构。例如修改为: 'com.example.webim'。
 
-#### 集成依赖类库
+#### 集成依赖库
 
 ```
 WebimProject/
@@ -107,7 +104,7 @@ WebimProject/
 				Webim/
 ```
 
-#### 集成前端静态资源文件
+#### 集成前端静态资源
 
 ```
 WebimProject/
@@ -115,13 +112,13 @@ WebimProject/
 		static/
 ```
 
-#### 配置文件
+#### Spring配置文件
 
 spring配置文件component-scan增加"webim"包。
 
-#### 启动项目
+#### 启动项目验证
 
-访问Webim/boot.do页面(注: 后缀根据spring配置可能不同)。
+启动Spring项目，访问Webim/boot.do页面(注: 后缀根据spring配置可能不同)。
 
 成功应返回一段javascript，内容类似:
 
@@ -154,7 +151,7 @@ var _IMC = {
    document.write( _IMC.script );
 ```
 
-### WebimPlugin开发
+### 实现WebimPlugin
 
 WebimPlugin.java是与Spring项目的用户体系、好友关系以及群组关系集成类。
 
@@ -306,28 +303,30 @@ webim.robot | bool | true  |  WebIM插件是否支持机器人
 
 webim.spring3.js
 
-
 ### 开启运行
 
-Spring站点或应用，需要显示WebIM的页面，直接嵌入WebIM的boot链接:
+Spring站点或应用，在需要显示WebIM的页面，直接嵌入WebIM的boot链接:
 
 ```
 <!-- 一般在footer或layout页面的</body>前，'do'后缀根据Spring配置修改 -->
 
 <script type="text/javascript" src="Webim/boot.do"></script>
 ```
-## 客户端类
-WebimClient | 与消息服务器通信的客户端类，采用JSON/HTTP协议设计
-WebimClient | 与消息服务器通信的客户端类，采用JSON/HTTP协议设计
-WebimCluster | 集群支持接口，将当前登陆用户按自定义规则分配到不同消息服务器
 
-## 模型对象
+### 聊天按钮
 
-WebIM的Java模型和客户端类，打包在***WebContent\WEB-INF\lib\webim-client-$vsn-$date.jar***。GitHub源码: [webim-java](https://github.com/webim/webim-java)。详细JavaDoc: [webim javadoc](https://github.com/webim/webim-java/tree/master/doc)。
+Spring站点加载WebIM的页面，可以在任何位置添加下面的格式的“聊天按钮":
 
-#### WebimClient
+```
+<a class="webim-chatbtn" href="/chat/1">Chat with User1</a>
+<a class="webim-chatbtn" href="/chat/1">Chat with User2</a>
+...
+```
 
-#### WebimCluster
+## 模型对象与客户端类
+
+
+WebIM的通用Java模型对象和客户端类，打包在***WebContent\WEB-INF\lib\webim-client-$vsn-$date.jar***。
 
 
 类/接口 | 说明
@@ -347,30 +346,25 @@ WebimMember | 群组成员模型类
 WebimNotification | 站内通知
 WebimMenu | 底栏按钮
 
-
 #### WebimEndpoint
 
-#### WebimUser
+WebimEndpoint是WebIM的核心模型对象，标识一个即时消息路由端点。WebIM的用户、访客、服务或机器人对象继承该类。
 
-#### WebimVisitor
+WebimEndpoint对象属性:
 
-#### WebimRobot
+属性 | 类型 | 是否必须 | 默认 | 说明
+---- | ---- | ---- | ---- | ----- |
+id | string | 是 | | 端点标识，一般为用户的uid。访客、机器人之类对象格式为: tag:id，例如访客的id: 'vid:v123'
+nick | string | 是 || 端点(用户)昵称，界面显示该名称
+presence | string | 是 | offline | 端点在线状态: online或offline
+show | string | 是 | unavailable | 端点的详细现场状态: available, away, chat, dnd, invisible, unavailable
+group | string | 是 | friend | 端点所属分组，界面显示的分组名称
+url | string | 否 | | 端点(用户)主页	
+avatar | string | 否 || 端点(用户)头像URL地址
+status | string | 否 || 端点(用户)的状态签名，界面显示
+status_time | string | 否 ||  状态最近更新时间
 
-#### WebimMessage
-
-#### WebimHistory
-
-#### WebimPresence
-
-#### WebimStatus
-
-#### WebimRoom
-
-#### WebimMember
-
-#### WebimNotification
-
-#### WebimMenu
+其他模型对象详细属性说明，请参考GitHub项目源码: [https://github.com/webim/webim-java](https://github.com/webim/webim-java)。
 
 ## 开发者(Developer)
 
