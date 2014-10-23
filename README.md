@@ -15,7 +15,7 @@ WebIM for Spring3开发包，通过开放源码以接口方式，与站点的用
 
 [NexTalk](http://nextalk.im/)是基于WEB标准协议设计的，简单专业开放源码的即时消息系统。可快速为社区微博、电子商务、企业应用集成即时消息服务。
 
-NexTalk架构上分解为：***WEB业务服务器*** + ***消息路由服务器*** 两个独立部分，遵循 ***Open Close***的架构设计原则。WebIM插件方式与第三方的站点或应用的用户体系开放集成，独立的消息服务器负责稳定的连接管理、消息路由和消息推送。
+NexTalk架构上分解为：***WebIM业务服务器*** + ***消息路由服务器*** 两个独立部分，遵循 ***Open Close***的架构设计原则。WebIM插件方式与第三方的站点或应用的用户体系开放集成，独立的消息服务器负责稳定的连接管理、消息路由和消息推送。
 
 ![NexTalk Architecture] (http://nextalk.im/static/img/design/arch.png)
 
@@ -364,7 +364,7 @@ avatar | string | 否 || 端点(用户)头像URL地址
 status | string | 否 || 端点(用户)的状态签名，界面显示
 status_time | string | 否 ||  状态最近更新时间
 
-其他模型对象详细属性说明，请参考GitHub项目源码: [https://github.com/webim/webim-java](https://github.com/webim/webim-java)。
+模型对象详细属性说明，请参考GitHub项目源码: [https://github.com/webim/webim-java](https://github.com/webim/webim-java)。
 
 ## 开发者(Developer)
 
