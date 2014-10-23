@@ -1,68 +1,384 @@
-webim-for-spring3
-=================
-
-webim for spring mvc3.2
-
-Demo
-====
-
-1. Import 'WebimProject' Project to Eclipse EE.
-
-2. Create Tomcat Server and Run
-
-3. Access: http://localhost:8080/WebimProject/
-
-Developer Guide
-===============
-
-Create Database
----------------
-
-import install.sql
+# WebIM for Spring3
 
 
-Coding WebimPlugin.java
------------------------
+## 简介
 
-implements these methods:
+[Spring](http://spring.io)是Java最常用的站点或应用开发框架。
 
-```java
+[WebIM for Spring3](https://github.com/webim/webim-for-spring3) 是 [NexTalk](http://nextalk.im) 为Spring框架提供的快速WebIM开发集成包。可为Spring框架开发的社区网站、电子商务、企业应用等提供立即可用的站内即时消息。
 
-1.  public WebimEndpoint endpoint();
+WebIM for Spring3开发包，通过开放源码的接口与站点的用户体系、数据库无缝集成。
 
-2.  public List<WebimEndpoint> buddies(String uid);
+TODO:
 
-3.  List<WebimEndpoint> buddiesByIds(String uid, String[] ids);
+WebIM的前端页面，集成后直接嵌入站点右下角。
 
-4.  public WebimRoom findRoom(String roomId);
+![Spring3 Screenshot](http://nextalk.im/static/img/screenshots/spring3.png)
 
-5.  public List<WebimRoom> rooms(String uid);
 
-6.  public List<WebimRoom> roomsByIds(String uid, String[] ids);
+## NexTalk
 
-8.  public List<WebimMember> members(String roomId);
+[ ***NexTalk*** ](http://nextalk.im/)是基于WEB标准协议设计的，简单专业开放源码的即时消息系统。可快速为社区微博、电子商务、企业应用集成即时消息服务。
 
-9.  public List<WebimNotification> notifications(String uid);
+NexTalk架构上分解为：***WEB业务服务器*** + ***消息路由服务器*** 两个独立部分，遵循 ***Open Close***的架构设计原则。WebIM插件方式与第三方的站点或应用的用户体系开放集成，独立的消息服务器负责稳定的连接管理、消息路由和消息推送。
+
+![NexTalk Architecture] (http://nextalk.im/static/img/design/arch.png)
+
+NexTalk的架构设计上有以下几个特点：
+
+1. 开放设计，专为与第三方站点或应用集成。通过开放源码的WebIM开发包，可与站点或应用的用户体系、群组关系、消息处理无缝集成。
+
+2. 快速集成，只需要实现简单的集成接口，5分钟启动demo，2天完成接口开发。NexTalk提供了Struts、Spring等框架的集成开发包，一般只需WebimPlugin接口即可。
+
+3. 方便定制，WebIM插件和前端代码全部开源，好友关系、消息路由全部可通过WebIM插件接口定制或扩展。例如实现动态好友关系，消息拦截过滤等。
+
+
+## 功能列表
+
+功能 | 发布版本
+---- | ----
+集成在浏览器右下⾓前端界⾯ | 1.0
+一对一聊天 (站点访客、⽤户、管理员间即时聊天) | 1.0
+群组聊天(聊天室)，临时讨论组聊天 | 1.0
+⺴站在线客服，访客与客服聊天 | 3.0
+⺴站⻚⾯嵌⼊聊天按钮，例如"在线客服" | 3.0
+离线好友显⽰，发送离线消息 | 5.0
+⽤户现场状态设置 | 1.0
+⽤户间发送表情 | 1.0
+用户间传送图⽚、⽂件 | 3.0
+消息拦截、过滤、敏感词处理 | 4.0
+简单的聊天机器人支持 | 5.0
+可移动聊天窗口支持 | 5.0
+手机版独立聊天窗口 | 5.5
+界⾯菜单隐藏或定制，界⾯透明背景、缩放⽀持 | 3.0
+⽤户界⾯提⽰⾳、收缩⼯具条、弹出窗⼝设置 | 3.0
+简单的开源桌⾯客户端 | 5.0
+Android手机客户端SDK | 6.0
+iOS手机客户端SDK | 6.0
+
+## 开发指南
+
+### 源码下载
+
+[http://nextalk.im/packages/spring3](http://nextalk.im/packages/spring3)
+
+### 运行演示
+
+1. 导入'WebimProject'项目到[Eclipse EE](http://eclipse.org/downloads/packages/eclipse-ide-java-ee-developers/lunasr1)
+
+2. Eclipse中创建Tomcat Server，启动项目: 'Run as' -> 'Run on Server' 
+
+3. 浏览器访问: http://localhost:8080/WebimProject/
+
+### 项目集成
+
+#### 集成代码
 
 ```
+WebimProject/
+	src/
+		webim/
+			controller/
+			dao/
+			service
+			
+```
 
-Coding WebimModel.java
------------------------
+注: 默认'webim'包的名称，可根据项目包命名规则重构。例如修改为: 'com.example.webim'。
 
-1. Histories
+#### 集成依赖类库
 
-2. Settings
+```
+WebimProject/
+	WebContent/
+		WEB-INF/ 
+			lib/
+				org.json-20120521.jar
+				webim.client-5.7.1-20141012.jar
+```
 
-Coding Config
--------------
+#### 集成JSP文件
 
-You should change the WebimConfig.java, and load configurations from database or xml.
+```
+WebimProject/
+	WebContent/
+		WEB-INF/
+			jsp/
+				Webim/
+```
 
-Webim Javascript
------------------------
+#### 集成前端静态资源文件
 
-Insert Javascript code below to web pages that need to display Webim:
+```
+WebimProject/
+	WebContent/
+		static/
+```
 
-	<script type="text/javascript" src="/WebimProject/Webim/boot.html"></script>
+#### 配置文件
+
+spring配置文件component-scan增加"webim"包。
+
+#### 启动项目
+
+访问Webim/boot.do页面(注: 后缀根据spring配置可能不同)。
+
+成功应返回一段javascript，内容类似:
+
+```
+var _IMC = {
+	product: 'spring3',
+   version: '5.7',
+   path: '/WebimProject/',
+   is_login: '1',
+   is_visitor: false,
+   user: '',
+   setting: {},
+   menu: '',
+   enable_chatlink: true,
+   enable_shortcut: false,
+   enable_menu: false,
+   enable_room: true,
+   enable_noti: true,
+   discussion: true,
+   theme: 'base',
+   local: 'zh-CN',
+   jsonp: false,
+   opacity: '80',
+   show_unavailable: true,
+   upload: false,
+   min: window.location.href.indexOf("webim_debug") != -1 ? "" : ".min"};
+
+   _IMC.script = window.webim ? '' : ('<link href="' + _IMC.path + 'static/webim'+ _IMC.min + '.css?' + _IMC.version + '" media="all" type="text/css" rel="stylesheet"/><link href="' + _IMC.path + 'static/themes/' + _IMC.theme + '/jquery.ui.theme.css?' + _IMC.version + '" media="all" type="text/css" rel="stylesheet"/><script src="' + _IMC.path + 'static/webim' + _IMC.min + '.js?' + _IMC.version + '" type="text/javascript"></script><script src="' + _IMC.path + 'static/i18n/webim-' + _IMC.local + '.js?' + _IMC.version + '" type="text/javascript"></script>');
+   _IMC.script += '<script src="' + _IMC.path + 'static/webim.'+ _IMC.product + '.js?' + _IMC.version + '" type="text/javascript"></script>';
+   document.write( _IMC.script );
+```
+
+### WebimPlugin开发
+
+WebimPlugin.java是与Spring项目的用户体系、好友关系以及群组关系集成类。
+
+好友关系集成方法: 
+
+方法名 | 参数 | 返回 |  说明
+---- | ---- | ---- |   ---- | 
+endpoint | HttpServletRequest | WebimEndpoint | 根据当前登陆用户，返回WebimEndpoint对象。当前登陆用户信息一般从session或项目的用户服务读取。
+buddies | uid | WebimEndpoint List |  根据当前登陆用户ID，读取该用户的好友列表
+buddiesByIds | uid, ids| WebimEndpoint List |  根据输入的用户id列表(ids)，返回用户列表
+
+群组关系集成方法(***如不支持群组，无需实现***):
+ 
+方法名 | 参数 | 返回 | 说明
+---- | ---- | ---- |  ---- 
+findRoom | roomId | WebimRoom | 根据roomId查找room
+rooms | uid | WebimRoom List | 根据当前用户ID，返回该用户的room列表
+roomsByIds | uid, ids | WebimRoom List | 根据群组id列表(ids)，返回群组列表
+members | roomId | WebimMember List | 根据roomId返回群组成员列表
+
+其他方法，包括敏感词、机器人、菜单、通知，详见WebimPlugin.java代码。
+
+### 创建数据库表
+
+WebIM自身需要创建几张数据库表，用于保存聊天记录、用户设置、临时讨论组、访客信息。
+
+默认MySQL的数据库脚本，在install.sql文件。Oracle以及其他数据库脚本，请联系NexTalk。
+
+数据库表 | 说明
+--------- | ------
+webim_histories |  历史聊天记录表
+webim_settings | 用户个人WebIM设置表
+webim_buddies | 好友关系表(注: 如果项目没有自身的好友关系，可以通过该表存储)
+webim_visitors | 访客信息表
+webim_rooms | 临时讨论组表(注: WebPlugin中是集成站点的固定群组，webim_rooms表是存储WebIM自己的临时讨论组)
+webim_members | 临时讨论组成员表
+webim_blocked | 群组是否block
+
+### 数据访问对象(Dao)
+
+WebIM自身的数据库访问类(Dao)在'webim.dao'包。各项目ORM框架不同，WebIM没有提供默认实现，而是封装了Dao方法，并在代码注释中提供了详细Sql查询语句。
 
 
+类 | 数据库表 | 是否必须 | 说明
+---- | ---- | ---- | ---- | 
+WebimHistoryDao | webim_histories | 是  | 历史聊天记录存储和查询
+WebimSettingDao | webim_settings | 是 | 用户WebIM设置存储和访问
+WebimRoomDao | webim_rooms, webim_members | 否 | 临时讨论组，讨论组成员(注: 如不支持讨论组，无需实现)
+WebimBuddyDao | webim_buddies | 否 | 好友关系存储和查询(注: 如站点自身有好友个关系，无需实现)
+WebimVisitorDao | webim_visitors | 否 | 访客存储和查询(注: 如不支持访客，无需实现)
+
+### 配置参数
+
+配置参数默认保存在Webim.properties文件，正式项目应将配置保存到数据库或者XML文件。
+
+Webim.properties内容示例:
+
+```
+#############################
+# Webim配置文件
+#############################
+
+# Webim插件版本
+webim.version=5.7
+
+# Webim插件是否开启
+webim.isopen=true
+
+# Webim消息服务器列表,逗号分割列表支持集群
+webim.server=t1.nextalk.im:8000,t2.nextalk.im:8000
+
+# Webim插件与消息服务器通信域名
+webim.domain=localhost
+
+# Webim插件与消息服务器通信APIKEY
+webim.apikey=public
+
+# Webim插件界面Theme
+webim.theme=base
+
+# Webim插件本地语言
+webim.local=zh-CN
+
+# Webim插件表情库
+webim.emot=default
+
+# Webim插件工具条透明度
+webim.opacity=80
+
+# Webim插件支持群组聊天
+webim.enable_room=true
+
+# Webim插件支持临时讨论组
+webim.enable_discussion=true
+
+# Webim插件显示通知按钮
+webim.enable_noti=true
+
+# Webim插件支持快捷工具栏
+webim.enable_shortcut=false
+
+# Webim插件支持聊天按钮
+webim.enable_chatlink=true
+
+# Webim插件显示菜单栏
+webim.enable_menu=false
+
+# Webim插件显示不在线好友
+webim.show_unavailable=true
+
+# Webim插件支持访客
+webim.enable_visitor=true
+
+# Webim插件支持文件上传
+webim.enable_upload=false
+
+# Webim插件是否支持JSONP的跨域请求
+webim.jsonp=false
+
+# Webim插件是否支持机器人
+webim.robot=true
+```
+
+配置参数说明:
+
+参数 | 类型  | 默认 | 说明
+---- | ---- |---- | -----
+webim.isopen | bool |  true | 是否开启WebIM
+webim.server | string  | t.nextalk.im:8000 | WebIM消息服务器列表,逗号分割列表支持集群
+webim.domain | string  | localhost | WebIM插件与消息服务器通信的认证域名
+webim.apikey | string  | public | WebIM插件与消息服务器通信的认证APIKEY
+webim.theme | string  | base | WebIM插件界面Theme
+webim.local | string  | zh-CN | WebIM插件本地语言
+webim.emot | string  | default | WebIM插件表情库: emot, qq
+webim.opacity | inteter | 80 | WebIM插件工具条透明度
+webim.enable_room | bool | true | WebIM插件是否支持群组聊天
+webim.enable_discussion | bool | true  | WebIM插件支持临时讨论组
+webim.enable_noti | bool | true   | WebIM插件显示通知按钮
+webim.enable_shortcut | bool | false  |  WebIM插件支持快捷工具栏
+webim.enable_chatlink | bool | true  |  WebIM插件支持聊天按钮
+webim.enable_menu | bool | false  |  WebIM插件显示菜单栏
+webim.show_unavailable | bool | true  |  WebIM插件显示不在线好友
+webim.enable_visitor | bool | true  |  WebIM插件支持访客
+webim.enable_upload | bool | false  |  WebIM插件支持文件上传
+webim.jsonp | bool | false  |  WebIM插件是否支持JSONP的跨域请求
+webim.robot | bool | true  |  WebIM插件是否支持机器人
+
+### 定制界面
+
+webim.spring3.js
+
+
+### 开启运行
+
+Spring站点或应用，需要显示WebIM的页面，直接嵌入WebIM的boot链接:
+
+```
+<!-- 一般在footer或layout页面的</body>前，'do'后缀根据Spring配置修改 -->
+
+<script type="text/javascript" src="Webim/boot.do"></script>
+```
+## 客户端类
+WebimClient | 与消息服务器通信的客户端类，采用JSON/HTTP协议设计
+WebimClient | 与消息服务器通信的客户端类，采用JSON/HTTP协议设计
+WebimCluster | 集群支持接口，将当前登陆用户按自定义规则分配到不同消息服务器
+
+## 模型对象
+
+WebIM的Java模型和客户端类，打包在***WebContent\WEB-INF\lib\webim-client-$vsn-$date.jar***。GitHub源码: [webim-java](https://github.com/webim/webim-java)。详细JavaDoc: [webim javadoc](https://github.com/webim/webim-java/tree/master/doc)。
+
+#### WebimClient
+
+#### WebimCluster
+
+
+类/接口 | 说明
+------ | ------
+WebimClient | 与消息服务器通信的客户端类，采用JSON/HTTP协议设计
+WebimCluster | 集群支持接口，将当前登陆用户按自定义规则分配到不同消息服务器
+WebimEndpoint | 核心的即时消息路由端点类，标识一个用户、访客、服务或其他对象
+WebimUser | 用户模型类，继承WebimEndpoint
+WebimVisitor | 访客模型类，继承WebimEndpoint
+WebimRobot | 机器人模型类，继承WebimEndpoint
+WebimMessage | 即时消息模型类
+WebimHistory | 历史消息模型类
+WebimPresence | 现场状态模型类
+WebimStatus | 状态模型类，例如用户正在输入
+WebimRoom | 群组模型类
+WebimMember | 群组成员模型类
+WebimNotification | 站内通知
+WebimMenu | 底栏按钮
+
+
+#### WebimEndpoint
+
+#### WebimUser
+
+#### WebimVisitor
+
+#### WebimRobot
+
+#### WebimMessage
+
+#### WebimHistory
+
+#### WebimPresence
+
+#### WebimStatus
+
+#### WebimRoom
+
+#### WebimMember
+
+#### WebimNotification
+
+#### WebimMenu
+
+## 开发者(Developer)
+
+公司: [NexTalk.IM](http://nextalk.im)
+
+作者: [Feng Lee](mailto:feng.lee@nextalk.im) 
+
+QQ: 1852861655
+
+版本: 5.7.1 (2014/10/15)
+ 
