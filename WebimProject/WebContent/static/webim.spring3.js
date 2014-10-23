@@ -41,7 +41,9 @@
 	};
 	var ui = new webim.ui(document.body, {
 		imOptions : {
-			jsonp : _IMC.jsonp
+			jsonp : _IMC.jsonp,
+			domain: document.domain,
+			storage: 'local'
 		},
 		soundUrls : soundUrls,
 		// layout: "layout.popup",
