@@ -3,7 +3,7 @@
 
 ## 简介
 
-[NexTalk](http://nextalk.im)为Spring框架提供的快速WebIM开发包。可为Spring框架开发的社区网站、电子商务、企业应用等提供立即可用的站内即时消息。
+[NexTalk](http://nextalk.im)为Spring框架提供的快速WebIM开发包。可为Spring框架开发站点或应用提供立即可用的站内即时消息。
 
 Spring3开发包以代码接口方式，与站点的用户体系、好友关系、数据库无缝集成。WebIM的前端界面，集成后直接嵌入站点右下角。并支持在站点页面的任意位置，添加聊天按钮:
 
