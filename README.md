@@ -3,28 +3,25 @@
 
 ## 简介
 
-WebIM for Spring3是[NexTalk](http://nextalk.im)为Spring框架提供的快速WebIM开发集成包。可为Spring框架开发的社区网站、电子商务、企业应用等提供立即可用的站内即时消息。
+[NexTalk](http://nextalk.im)为Spring框架提供的快速WebIM开发包。可为Spring框架开发的社区网站、电子商务、企业应用等提供立即可用的站内即时消息。
 
-WebIM for Spring3开发包，通过开放源码以接口方式，与站点的用户体系、好友关系、数据库无缝集成。WebIM的前端界面，集成后直接嵌入站点右下角。并支持在站点页面的任意位置，添加聊天按钮:
+Spring3开发包以代码接口方式，与站点的用户体系、好友关系、数据库无缝集成。WebIM的前端界面，集成后直接嵌入站点右下角。并支持在站点页面的任意位置，添加聊天按钮:
 
 ![Spring3 Screenshot](http://nextalk.im/static/img/screenshots/spring3.png)
 
 ## NexTalk
 
-[NexTalk](http://nextalk.im/)是基于WEB标准协议设计的，简单专业开放源码的即时消息系统。可快速为社区微博、电子商务、企业应用集成即时消息服务。
+***NexTalk***是基于WEB标准协议设计的，主要应用于WEB站点的，简单开放的即时消息系统。可快速为社区微博、电子商务、企业应用集成即时消息服务。
 
 NexTalk架构上分解为：***WebIM业务服务器*** + ***消息路由服务器*** 两个独立部分，遵循 ***Open Close***的架构设计原则。WebIM插件方式与第三方的站点或应用的用户体系开放集成，独立的消息服务器负责稳定的连接管理、消息路由和消息推送。
 
-![NexTalk Architecture] (http://nextalk.im/static/img/design/arch.png)
+![NexTalk Architecture](http://nextalk.im/static/img/design/arch.png)
 
 NexTalk的架构设计上有以下几个特点：
 
-1. 开放设计，专为与第三方站点或应用集成。通过开放源码的WebIM开发包，可与站点或应用的用户体系、群组关系、消息处理无缝集成。
-
-2. 快速集成，只需要实现简单的集成接口，5分钟启动demo，2天完成接口开发。NexTalk提供了Struts、Spring等框架的集成开发包，一般只需WebimPlugin接口即可。
-
+1. 开放设计，通过开放源码的WebIM开发包，可与站点或应用的用户体系、群组关系、消息处理无缝集成。
+2. 快速集成，NexTalk为常用的WEB框架提供了直接可用的开发包。5分钟启动demo，1天可完成开发集成。
 3. 方便定制，WebIM插件和前端代码全部开源，好友关系、消息路由全部可通过WebIM插件接口定制或扩展。例如实现动态好友关系，消息拦截过滤等。
-
 
 ## 功能列表
 
@@ -60,9 +57,7 @@ iOS手机客户端SDK | 6.0
 Webim for Spring3开发包，自带WebimProject的演示项目，导入Eclipse即可运行。
 
 1. 导入'WebimProject'项目到[Eclipse EE](http://eclipse.org/downloads/packages/eclipse-ide-java-ee-developers/lunasr1)
-
 2. Eclipse中创建Tomcat Server，启动项目: 'Run as' -> 'Run on Server' 
-
 3. 浏览器访问: http://localhost:8080/WebimProject/
 
 ### 项目集成
