@@ -15,7 +15,7 @@ Spring3开发包以代码接口方式，与站点的用户体系、好友关系�
 
 NexTalk架构上分解为：***WebIM业务服务器*** + ***消息路由服务器*** 两个独立部分，遵循 ***Open Close***的架构设计原则。WebIM插件方式与第三方的站点或应用的用户体系开放集成，独立的消息服务器负责稳定的连接管理、消息路由和消息推送。
 
-![NexTalk Architecture](http://nextalk.im/static/img/design/arch.png)
+![NexTalk Architecture](http://nextalk.im/static/img/design/WebimForSpring.png)
 
 NexTalk的架构设计上有以下几个特点：
 
