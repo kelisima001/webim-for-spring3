@@ -232,7 +232,7 @@ public class WebimController {
 			}
 			// need test
 			this.model.offlineHistoriesReaded(uid);
-			data.remove("presences");
+			//data.remove("presences");
 			data.put("buddies", rtBuddies.toArray());
 			data.put("rooms", rooms.toArray());
 			data.put("new_messages", offlineHistories.toArray());
