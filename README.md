@@ -312,7 +312,7 @@ Spring站点或应用，在需要显示WebIM的页面，直接嵌入WebIM的boot
 
 ### 聊天按钮
 
-Spring站点加载WebIM的页面，可以在任何位置添加下面的格式的“聊天按钮":
+Spring站点加载WebIM的页面，可以在任何位置添加下面格式的“聊天按钮":
 
 ```
 <a class="webim-chatbtn" href="/chat/1">Chat with User1</a>
