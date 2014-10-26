@@ -123,12 +123,11 @@ body {
 			<h2>开发者</h2>
 			<p>
 				公司: http://nextalk.im<br> 作者: <a
-					href="mailto:feng.lee@nextalk.im">Feng Lee</a><br> QQ:
-				1852861655
+					href="mailto:feng.lee@nextalk.im">Feng Lee</a><br>
 			</p>
 		</div>
 		<div class="footer">
-			<p>&copy; NexTalk 2014</p>
+			<p>&copy; Powered by NexTalk 2014</p>
 		</div>
 
 	</div>
