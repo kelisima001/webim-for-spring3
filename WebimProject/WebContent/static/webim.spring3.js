@@ -11,6 +11,7 @@
 		online : path + "Webim/online" + suffix,
 		offline : path + "Webim/offline" + suffix,
 		buddies : path + "Webim/buddies" + suffix,
+		search : path + "Webim/search" + suffix,
 		deactivate : path + "Webim/refresh" + suffix,
 		message : path + "Webim/message" + suffix,
 		presence : path + "Webim/presence" + suffix,
@@ -35,6 +36,7 @@
 	webim.ui.emot.init({
 		"dir" : path + "static/images/emot/default"
 	});
+	
 	var soundUrls = {
 		lib : path + "static/assets/sound.swf",
 		msg : path + "static/assets/sound/msg.mp3"
@@ -48,7 +50,9 @@
 		soundUrls : soundUrls,
 		// layout: "layout.popup",
 		layoutOptions : {
-			unscalable : _IMC.is_visitor
+			unscalable : _IMC.is_visitor,
+			//detachable: false,
+			maximizable: true
 		},
 		buddyChatOptions : {
 			downloadHistory : !_IMC.is_visitor,
@@ -77,6 +81,7 @@
 		is_login : _IMC['is_login'],
 		disable_login : true,
 		collapse : false,
+		search: 'remote',
 		// disable_user: _IMC.is_visitor,
 		// simple: _IMC.is_visitor,
 		loginOptions : _IMC['login_options']
@@ -89,9 +94,14 @@
 		if (_IMC.enable_noti)
 			ui.addApp("notification");
 	}
-	if (_IMC.enable_chatlink)
-		ui.addApp("chatbtn");
-	ui.addApp("setting", {
+	if (_IMC.enable_chatbtn)
+		ui.addApp("chatbtn", {
+			elmentId: null,
+			//chatbox: true,
+			classRe: /webim-chatbtn/,
+			hrefRe: [/chatbox\.do\?uid=(\d+)$/i]
+		});
+		ui.addApp("setting", {
 		"data" : webim.setting.defaults.data,
 		"copyright" : true
 	});
