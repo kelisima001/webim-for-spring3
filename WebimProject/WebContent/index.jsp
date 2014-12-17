@@ -70,15 +70,15 @@ body {
 			<h2>聊天按钮</h2>
 			<p>页面任意位置，可以添加聊天按钮...</p>
 			<ul>
-				<li><a class="webim-chatbtn" href="/chat/1">聊天按钮1</a></li>
-				<li><a class="webim-chatbtn" href="/chat/2">聊天按钮2</a></li>
-				<li><a class="webim-chatbtn" href="/chat/3">聊天按钮3</a></li>
-				<li><a class="webim-chatbtn" href="/chat/4">聊天按钮4</a></li>
-				<li><a class="webim-chatbtn" href="/chat/5">聊天按钮5</a></li>
-				<li><a class="webim-chatbtn" href="/chat/6">聊天按钮6</a></li>
-				<li><a class="webim-chatbtn" href="/chat/7">聊天按钮7</a></li>
-				<li><a class="webim-chatbtn" href="/chat/8">聊天按钮8</a></li>
-				<li><a class="webim-chatbtn" href="/chat/9">聊天按钮9</a></li>
+				<li><a class="webim-chatbtn" href="Webim/chatbox.do?uid=1">聊天按钮1</a></li>
+				<li><a class="webim-chatbtn" href="Webim/chatbox.do?uid=2">聊天按钮2</a></li>
+				<li><a class="webim-chatbtn" href="Webim/chatbox.do?uid=3">聊天按钮3</a></li>
+				<li><a class="webim-chatbtn" href="Webim/chatbox.do?uid=4">聊天按钮4</a></li>
+				<li><a class="webim-chatbtn" href="Webim/chatbox.do?uid=5">聊天按钮5</a></li>
+				<li><a class="webim-chatbtn" href="Webim/chatbox.do?uid=6">聊天按钮6</a></li>
+				<li><a class="webim-chatbtn" href="Webim/chatbox.do?uid=7">聊天按钮7</a></li>
+				<li><a class="webim-chatbtn" href="Webim/chatbox.do?uid=8">聊天按钮8</a></li>
+				<li><a class="webim-chatbtn" href="Webim/chatbox.do?uid=9">聊天按钮9</a></li>
 			</ul>
 			<h2>功能列表</h2>
 			<ul>
