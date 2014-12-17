@@ -134,14 +134,15 @@ public class WebimController {
 		response.setHeader("Cache-Control", "no-cache");
 		Map<String, Object> data = new HashMap<String, Object>();
 		String[] keys = new String[] { 
-				"version", 
-				"theme", 
+				"version",
+				"theme",
 				"local", 
 				"emot",
 				"opacity", 
 				"enable_room", 
 				"enable_discussion",
 				"enable_chatlink", 
+				"enable_chatbtn", 
 				"enable_shortcut", 
 				"enable_noti",
 				"enable_menu", 
@@ -160,7 +161,25 @@ public class WebimController {
 		data.put("setting", this.model.getSetting(endpoint.getId()));
 		return new ModelAndView("Webim/boot", data);
 	}
-
+	
+	@RequestMapping(value = "/chatbox", method=RequestMethod.GET)
+	public ModelAndView chatbox(HttpServletRequest request,
+			HttpServletResponse response) throws Exception {
+		Map<String, Object> data = new HashMap<String, Object>();
+		WebimEndpoint endpoint = currentEndpoint(request,response);
+		String uid = request.getParameter("uid");
+		List<WebimEndpoint> buddies = plugin.buddiesByIds(endpoint.getId(), new String[]{uid});
+		data.put("uid", uid);
+		data.put("context_path", request.getContextPath());
+		if(buddies.size() > 0) {
+			WebimEndpoint buddy = buddies.get(0);
+			data.put("nick", buddy.getNick());
+			data.put("avatar", buddy.getAvatar());
+			return new ModelAndView("Webim/chatbox", data);
+		}
+		return new ModelAndView("Webim/notfound", data);
+	}
+	
 	@RequestMapping(value = "/online", method=RequestMethod.POST)
 	@ResponseBody
 	public Map<String, Object> online(HttpServletRequest request,
@@ -232,7 +251,7 @@ public class WebimController {
 			}
 			// need test
 			this.model.offlineHistoriesReaded(uid);
-			data.remove("presences");
+			//data.remove("presences");
 			data.put("buddies", rtBuddies.toArray());
 			data.put("rooms", rooms.toArray());
 			data.put("new_messages", offlineHistories.toArray());
@@ -393,6 +412,15 @@ public class WebimController {
 		return buddies;
 	}
 
+	@RequestMapping(value = "/search", method = RequestMethod.GET)
+	@ResponseBody
+	public List<WebimEndpoint> search(HttpServletRequest request,
+			HttpServletResponse response) throws Exception {
+		String nick = request.getParameter("nick");
+		List<WebimEndpoint> buddies = plugin.search(nick);
+		return buddies;
+	}
+	
 	@RequestMapping(value = "/history", method = RequestMethod.GET)
 	@ResponseBody
 	public List<WebimHistory> history(HttpServletRequest request,

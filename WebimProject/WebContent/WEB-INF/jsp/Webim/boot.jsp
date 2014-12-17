@@ -11,6 +11,7 @@
                 setting: ${setting},
                 menu: '',
                 enable_chatlink: ${enable_chatlink},
+                enable_chatbtn: ${enable_chatbtn},
                 enable_shortcut: ${enable_shortcut},
                 enable_menu: ${enable_menu},
                 enable_room: ${enable_room},
