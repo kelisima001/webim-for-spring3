@@ -152,6 +152,25 @@ public class WebimPlugin {
 		}
 		return buddies;
 	}
+	
+	/**
+	 * API: search buddies by nick
+	 * 
+	 * @param nick
+	 * @return buddies
+	 */
+	public List<WebimEndpoint> search(String nick) {
+		// TODO: 示例代码
+		List<WebimEndpoint> buddies = new ArrayList<WebimEndpoint>();
+		WebimEndpoint ep = new WebimEndpoint("20", "user20");
+		ep.setAvatar("static/images/male.png");
+		//ep.setShow("unavailable");
+		ep.setUrl(""); // 用户空间
+		ep.setStatus(""); // 用户状态
+		buddies.add(ep);
+		return buddies;
+	}
+
 
 	/**
 	 * 根据roomId读取群组
@@ -293,5 +312,7 @@ public class WebimPlugin {
 	public WebimRobot getRobot() {
 		return robot;
 	}
+
+
 
 }
