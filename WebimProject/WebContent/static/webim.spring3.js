@@ -89,8 +89,9 @@
 		if (_IMC.enable_noti)
 			ui.addApp("notification");
 	}
-	if (_IMC.enable_chatlink)
+	if (_IMC.enable_chatlink) {
 		ui.addApp("chatbtn");
+	}
 	ui.addApp("setting", {
 		"data" : webim.setting.defaults.data,
 		"copyright" : true
