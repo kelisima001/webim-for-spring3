@@ -56,7 +56,7 @@ body {
 	<div class="wrapper">
 		<div class="header">
 			<h1>WebIM for Spring</h1>
-			<p>版本: 5.7.2 (2014/10/15)</p>
+			<p>版本: 5.8 (2014/12/20)</p>
 		</div>
 		<div class="content">
 			<h2>简介</h2>
