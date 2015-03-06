@@ -577,10 +577,10 @@ public class WebimController {
 
 	@RequestMapping("/upload")
 	@ResponseBody
-	public String upload(HttpServletRequest request,
+	public ModelAndView upload(HttpServletRequest request,
 			HttpServletResponse response) {
 		// TODO:
-		return SUCCESS;
+		return new ModelAndView("Webim/upload");
 	}
 
 	@RequestMapping(value = "/setting" , method = RequestMethod.POST)

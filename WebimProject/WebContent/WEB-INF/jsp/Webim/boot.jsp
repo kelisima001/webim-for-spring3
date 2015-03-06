@@ -22,7 +22,7 @@
                 jsonp: ${jsonp},
                 opacity: '${opacity}',
                 show_unavailable: ${show_unavailable},
-                upload: false,
+                upload: true,
                 min: window.location.href.indexOf("webim_debug") != -1 ? "" : ".min"
             };
 
